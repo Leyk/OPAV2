@@ -1,0 +1,464 @@
+body {
+
+  font-family: 'Lato', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; }
+
+h1, h2, h3 {
+
+  font-family: 'Lato', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  text-align: center;
+  margin-top: 25px;
+  margin-bottom: 15px; }
+
+section{
+
+  padding: 1em 0; }
+
+header, footer {
+
+  background-color: #FFCC00;
+
+  text-align: center; 
+
+  padding: 2em 0; }
+
+a, 
+
+.panel a, 
+
+.panel.callout a:not(.button) {
+
+  color: black;}
+
+h1.logo{
+
+  color: #FFF;
+
+  text-transform: uppercase;
+
+  font-weight: 900;
+
+  line-height: 1em; 
+
+  margin-top: 0;}
+
+header h1.logo{
+
+  font-size: 2em;
+
+  letter-spacing: 1px;
+
+  transition:letter-spacing 1s;
+
+  -webkit-transition:letter-spacing 1s, -webkit-transform 1s; }
+
+footer h1.logo {
+
+  font-size: 1.5em; }
+
+h1.logo span {
+
+  color: #33A7C2;
+
+  font-weight: 300; }
+
+header h1.logo:hover {
+
+  letter-spacing: 10px;
+
+}
+
+header h2 {
+
+  font-size: 1.5em;
+
+  color: #FFF;
+
+  margin-bottom: 0;
+
+  text-transform: uppercase;
+
+  font-weight: normal; }
+
+.presentation{
+
+  color: white;
+
+  background-color: #75DCCD; }
+
+body.homecarto {
+
+  text-align: left; }
+
+
+
+.presentation h3{
+
+  font-size: 1.3em;
+
+  text-transform: uppercase;
+
+  color: white; }
+
+h2 {
+
+  font-size: 1.5em;
+
+  color: #FFAD00;
+
+  text-transform: uppercase;
+
+  font-weight: normal; }
+
+header #menu {
+
+  color: #EDAB00;
+
+  text-transform: uppercase;
+
+  background-color: #FFEA95; }
+
+header #menu a {
+
+  color: #EDAB00;
+
+  margin: 0 2em; }
+
+
+
+textarea {
+
+  transition: height 0.2s;
+
+  -webkit-transition: height 0.2s;
+
+  -moz-transition: height 0.2s;
+
+}
+
+nav {
+
+}
+
+
+
+#coordonnees {
+
+  -ms-word-break: break-all;
+
+  word-break: break-all;
+
+  word-break: break-word;
+
+  -webkit-hyphens: auto;
+
+  -moz-hyphens: auto;
+
+  hyphens: auto; }
+
+
+
+
+.tabs dd > a, .tabs .tab-title > a {  
+
+  color: #E9890F;
+
+  text-transform: uppercase;
+
+  font-size: .9em;
+
+  background: #FFCC00; }
+
+
+
+.tabs dd.active a, .tabs .tab-title.active a {
+
+  border-color: #d8d8d8;
+
+  color: white;
+
+  background: #FF9900; }
+
+
+
+.tabs-content {
+
+  border-style: solid;
+
+  border-width: 1px;
+
+  border-color: #FF9900;
+
+  margin-bottom: 1.25em;
+
+  padding: 1.25em;
+
+  background: #FF9900; }
+
+
+
+.tabs-content a {
+
+  color: #FFF; }
+
+
+
+.alert-box.success{
+
+  background-color: #1BAD33;
+
+  border-color: #1B802B; }
+
+
+
+
+
+.presentation .legende {
+
+  color: #000; }
+
+
+
+#boutonactions {
+
+  text-transform: uppercase;
+
+  background-color: #33A7C2;
+
+  color: white;
+
+  position: absolute;
+
+  right: 0;
+
+  top: 50px;
+
+  padding: 9px 15px; }
+
+#boutonactions:hover {
+
+  cursor: pointer; }
+
+#interac {
+
+  position: relative;
+
+ }
+
+
+
+#interactions{
+
+  position: absolute;
+
+  right: 0;
+
+  top: 92px;
+
+  opacity: 0.9;
+
+  list-style: none; }
+
+
+
+.infos {
+
+  color: #555;
+
+  font-style: italic; }
+
+
+
+#interactions li{
+
+  display: block;
+
+  font-size: .8em;
+
+  background-color: #FFCC00;
+
+  padding: 2px 6px 2px 20px;
+
+  text-align: right;
+
+  text-transform: uppercase;
+
+  color: #111; }
+
+
+
+#interac #interactions li:hover{
+
+  background-color: #FFF; }
+
+
+
+#interactions li span, 
+
+#boutonactions span {
+
+  padding-left: 10px;  }
+
+
+
+#interactions li.ajout{
+
+  background-color: #469D11; }
+
+
+
+#interactions li.moderateur{
+
+  background-color: #FF7E00; }
+
+
+
+#interactions li.contact{
+
+  background-color: #FFCC00; }
+
+
+
+#interactions li.forcevive{
+
+  color: #E5500F;
+
+  background-color: #FFCC00; }
+
+
+
+#interactions li.finance{
+
+  background-color: #4798d0; }
+
+
+
+#interactions li.conseil{
+
+  background-color: #E3AAE7; }
+
+
+
+#interactions li.aide{
+
+  background-color: #DF56DD ; }
+
+
+
+
+
+/* D3JS */
+
+.node {
+ 
+    cursor: pointer;   /* apparence de la souris sur les différents noeuds */
+    opacity: 0.7;  /* transparance assez élevée modérée pour plus de visibilité du texte */
+}
+
+.node--root {
+    opacity: 1;  /* pas de transparance pour le root */
+}
+
+.node:hover {
+/* propriétés des contours au passage de la souris */
+    stroke: #000;    /* couleur */
+
+    stroke-width: 2px;  /* taille */
+
+}
+
+.node--leaf {
+
+    fill: #FFCC00; /* couleur des noeuds */
+    stroke: #000;    /* couleur contour */
+    stroke-width: 0.5px;  /* taille contour */
+
+}
+
+.node--leaf:hover {
+
+    fill: #F28101; /* couleur des noeuds au passage souris*/
+
+}
+
+.label {
+
+    text-anchor: middle;  /* alignement du texte par rapport au milieu */
+
+   /* font: 1.2em "Arial Black"; /* grosse police pour lisibilité */
+    font-family:  inherit;
+    font-weight: bold;
+    font-size: 1.4em;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;  /* ombres (décalage vers la droite, vers le bas, valeur du flou, couleur) */
+}
+
+.node--root {
+
+    pointer-events: all;
+
+}
+
+.node--leaf {
+  pointer-events: all;
+}
+
+
+/* Medium + */
+
+@media only screen and (min-width: 40.063em) {
+
+  header h1.logo {
+
+    font-size: 5em;}
+
+}
+		
+
+p{
+  text-align: justify;
+}
+
+#volet {
+  background: white;
+  margin-left: 0;
+  /*height: 900px;*/
+  overflow: scroll;
+  /*text-align: justify;*/
+ /* border: 1px black groove;*/
+}
+    /* dans les 3 cas ci-dessous le volet est affiché au dessus de la constellation */
+   /* @media (min-width: 1px){
+      #volet{
+        height: 100px;
+      }
+    }
+    @media (min-width: 768px) {
+        #volet {
+            height: 200px;
+        }
+    }
+    @media (min-width: 992px) {
+        #volet {
+            height: 300px;
+        }
+    }
+    /*le volet est affiché à gauche de la constellation */
+    /*@media (min-width: 1026px) {
+        #volet {
+            height: 1150px;
+        }*/
+
+.row {
+  max-width: 100%;
+}
+
+#erreur {
+  display: none;
+  color:red;
+  text-align: center;
+}
+
+#resultat{
+  display: none;
+  color: green;
+  text-align: center;
+}

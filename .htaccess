@@ -1,0 +1,37 @@
+# Active le php5
+
+SetEnv PHP_VER 5
+
+
+
+# Interdit le listing des fichiers des reps
+
+Options -indexes
+
+
+
+# Le serveur doit suivre les liens symboliques :
+
+Options +FollowSymlinks
+
+# Activation du module de réécriture d'URL :
+
+# RewriteEngine on
+
+# RewriteBase /
+
+# custom 404 page
+
+# We don't need to tell everyone we're apache.
+
+ServerSignature Off
+
+# KILL THEM ETAGS
+
+# Header unset ETag
+
+# FileETag INode MTime Size
+
+# RewriteCond %{REQUEST_FILENAME} !-f
+
+# RewriteRule ^([^\.]+)$ $1.php [NC,L]

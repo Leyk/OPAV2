@@ -1,0 +1,16 @@
+/* humanstxt.org */
+
+/* TEAM */
+	Initiateur : Mathias Lahiani
+	From : Montferrier sur Lez (34), France
+
+	Main developer: Raphaël Chassigneux
+	From : Dieulefit (26), France
+
+/* Foundation was made by ZURB */
+/* zurb.com */
+
+/* SITE */
+  Standards: HTML5, CSS3
+  Components: jQuery, Orbit, Reveal
+  IDE: Sublime Text, FileZilla, Photoshop
