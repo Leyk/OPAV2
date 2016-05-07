@@ -157,7 +157,7 @@
                 .enter().append("text")
                 .attr("class", "label")
                 .style("fill-opacity", function (d) {
-                return d.parent === root ? 1 : 0; /* opacité transparent si non feuille */
+                return d.parent === root ? 1 : 0; // opacité transparent si non feuille 
             })
                 .style("display", function (d) {
                 return d.parent === root ? null : "none";
@@ -169,6 +169,31 @@
                  // }
                 
             });
+
+			/*var text = svg.selectAll("text")
+				.data(nodes)
+				.enter().append("foreignObject")
+				.attr('width',150)
+				.attr('height',130)
+				//.attr("class","label")
+				/*.style("fill-opacity", function (d) {
+                return d.parent === root ? 1 : 0; // opacité transparent si non feuille 
+            })
+                .style("display", function (d) {
+                return d.parent === root ? null : "none";
+            })
+                .append("xhtml:body")
+                .html(function(d){
+                	var thisNode = d3.select(this);
+                	return '<div style="width: 150px;"> Mon texte </div>'});
+                /*.text(function (d) {  
+                  var thisNode = d3.select(this);
+                 // if(d.children){
+                    return d.name;
+                 // }
+                
+            });*/
+
 
             // ================================ Dimensions du volet ===============================================
             function redimensionnement(){
@@ -198,7 +223,7 @@
 			
 
             //retours à la ligne => changer en s'aidant du diamètre des cercles (d.r*2) pour quelque chose de propre
-            var insertLinebreaks = function (d) {
+           /* var insertLinebreaks = function (d) {
 			    var el = d3.select(this);
 			    var words = d.name.split(' ') // regroupement de chaque mot (séparation par ',')
 			    el.text('');
@@ -215,7 +240,52 @@
 			            tspan.attr('x', 0).attr('dy', '25'); // saut de ligne avec dy espacement vertical
 			    }
 			};
-		    svg.selectAll('text').each(insertLinebreaks); 
+		    svg.selectAll('text').each(insertLinebreaks); */
+		    var wrap = function(d){
+		    	var el = d3.select(this);
+			    var words = d.name.split(/\s+/).reverse();  // découpage en mots + reverse : premier mot devient le dernier et le dernier devient le premier
+			    el.text('');
+			    var	word,
+			    	saveSpan = [],
+			    	line = [],
+			    	lineNumber = 0,
+			    	lineHeight = 30,
+			    	y = el.attr("y"),
+			    	valY = 0,
+			    	dy = parseFloat(el.attr("dy"))
+			    
+			    var tspan = el.append("tspan").attr("x",0).attr("y",valY).attr("dy", 0);
+			    saveSpan.push(tspan);  // pour garder en mémoire les différents tspan pour un même titre (sert à pouvoir les modifier si nb ligne > 3) (à voir pour meilleure façon de faire)
+		    	while (word = words.pop()){  // tant qu'il y a des mots (parcours de tous les mots)
+		    		line.push(word);  // ajoute le mot à la ligne
+		    		tspan.text(line.join(" "));  // ajoute la ligne en texte
+		    		alert(d.name+" "+tspan.node().getBBox().height); // IMPORTANT
+		    		if (tspan.node().getComputedTextLength() > d.r*2){  // si la taille du texte dépasse le diamètre (r*2) du cercle, on va à la ligne
+		    			line.pop(); 
+		    			tspan.text(line.join(" ")); 
+		    			line = [word];
+		    			tspan = el.append("tspan").attr("x",0).attr("y",valY).attr("dy",++lineNumber*lineHeight).text(word);
+		    			saveSpan.push(tspan);
+		    		}
+		    	}
+		    	lineNumber = lineNumber+1;
+		    	if (lineNumber >= 3){ // s'il y a au moins 3 lignes, on réajuste y pour centrer verticalement les titres
+		    		if((lineNumber % 2) == 0){  // nombre de ligne pair
+		    			while (maSpan = saveSpan.pop()){
+		    				var mult = (lineNumber/2)-1
+		    	    		maSpan.attr('y',-lineHeight*mult);
+		    	    	}
+		    		}
+		    		else {
+		    			while (maSpan = saveSpan.pop()){ // nombre de ligne impair
+		    				var mult = ~~(lineNumber/2);
+		    	    		maSpan.attr('y',-lineHeight*mult);
+		    	    	}
+		    		}
+		    	}
+		   };
+		    svg.selectAll('text').each(wrap);
+
 
         	var node = svg.selectAll("circle,text");
 
