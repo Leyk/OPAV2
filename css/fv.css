@@ -393,7 +393,7 @@ nav {
 
 .node--root {
 
-    pointer-events: all;
+  pointer-events: all;
 
 }
 
@@ -461,4 +461,16 @@ p{
   display: none;
   color: green;
   text-align: center;
+}
+
+div.tooltip {
+    display: inline;
+    position: absolute; /*very important*/
+    text-align: left;    
+    padding: 5px 10px 5px 10px;
+    font: bold 20px sans-serif;
+    color: black;
+    background: white;
+    border-radius: 8px;  
+    pointer-events: none;
 }

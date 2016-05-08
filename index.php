@@ -70,7 +70,7 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="js/foundation.min.js"></script>
-    <script src="js/foundation/foundation.tooltip.js"></script>
+   <!-- <script src="js/foundation/foundation.tooltip.js"></script>-->
     <script>
       $(document).foundation();
 
@@ -109,12 +109,18 @@
             return d.size; /* taille des feuilles */
         });
 
+
         var svg = d3.select("#svgdiv").append("svg")
             .attr("width", diameter) // largeur du "rectangle" contenant le cercle root
             .attr("height", diameter) // hauteur du "rectangle" contenant le cercle root
             .attr("id","carto")
             .append("g")  /* pour grouper */
             .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+
+        var tooltip = d3.select("#svgdiv")
+		    .append("div")
+		    .attr("class", "tooltip")
+			.style("opacity", 0);
 
             var focus = root,   /* focus initial sur le root (variable contenant tout l'arbre de données) */
                 nodes = pack.nodes(root),
@@ -134,6 +140,23 @@
                 /* colorie les cercles par rapport à leur profondeur dans l'arbre de données (depth =0=>root). La couleur des feuilles est définie dans le css*/
             }) 
                 .on("click", clickFct) 
+                .on("mouseover",mouseover)
+                .on("mouseout",mouseout)
+               
+                function mouseover(d) {
+                	if(d3.select(this).classed("node--leaf")){
+					    tooltip.html(d.name)
+					        /*.style("left", (d3.event.pageX + 10) + "px")
+					        .style("top", (d3.event.pageY - 10) + "px")*/
+					        .style("left", (d.x)+"px")
+					        .style("top", (d.y)+"px")
+					        .style("opacity", 1);
+				     }
+				};
+
+				function mouseout(d) {      
+				    tooltip.style("opacity", 0);
+				}
 
                 function clickFct(d,i) {  /* i = place dans l'arbre Json (0 = forcesvives = root)*/
                   if(d3.select(this).classed("node--leaf")){
@@ -244,6 +267,7 @@
 		    var wrap = function(d){
 		    	var el = d3.select(this);
 			    var words = d.name.split(/\s+/).reverse();  // découpage en mots + reverse : premier mot devient le dernier et le dernier devient le premier
+			   // alert(words);
 			    el.text('');
 			    var	word,
 			    	saveSpan = [],
@@ -259,8 +283,9 @@
 		    	while (word = words.pop()){  // tant qu'il y a des mots (parcours de tous les mots)
 		    		line.push(word);  // ajoute le mot à la ligne
 		    		tspan.text(line.join(" "));  // ajoute la ligne en texte
-		    		alert(d.name+" "+tspan.node().getBBox().height); // IMPORTANT
-		    		if (tspan.node().getComputedTextLength() > d.r*2){  // si la taille du texte dépasse le diamètre (r*2) du cercle, on va à la ligne
+		    		//alert(d.name+" "+tspan.node().getBBox().height); // IMPORTANT
+		    		alert(d.name+" diam : "+d.r*2+"textlen : "+tspan.node().getComputedTextLength());
+		    		if (tspan.node().getComputedTextLength() >= d.r*2){  // si la taille du texte après ajout d'un mot dépasse le diamètre (r*2) du cercle, on retire le mot et on va à la ligne
 		    			line.pop(); 
 		    			tspan.text(line.join(" ")); 
 		    			line = [word];
@@ -283,7 +308,7 @@
 		    	    	}
 		    		}
 		    	}
-		   };
+		    };
 		    svg.selectAll('text').each(wrap);
 
 
@@ -322,6 +347,7 @@
                     };
                 });
 
+
                 transition.selectAll("text")
                     .filter(function (d) {
                     return d.parent === focus || this.style.display === "inline";
@@ -332,9 +358,12 @@
                     .each("start", function (d) {
                     if (d.parent === focus) this.style.display = "inline";
                 })
+                    //.each(wrap);
                     .each("end", function (d) {
                     if (d.parent !== focus) this.style.display = "none";
                 });
+
+                   //transition.selectAll('text').each(wrap);
             }
 
             function zoomTo(v) {
@@ -348,9 +377,12 @@
                 });
             }
         d3.select(self.frameElement).style("height", diameter + "px");
+         
+
+
         </script>
         <script>
-          $(document).foundation('tooltip', 'reflow'); </script>
+          //$(document).foundation('tooltip', 'reflow'); </script>
        
         <script src="//cdn.transifex.com/live.js"></script>
 
