@@ -181,9 +181,10 @@ function affiche_tree()
                 // Nouvelle action
                 if (isset($aff_ac)) $aff_ac .= ",";
                 if(!isset($aff_ac)) $aff_ac = "";
+                $size = strlen($ra["initiative_titre"])*strlen($ra["initiative_titre"]); // à remplacer par importance du projet (échelle de 1 à 5 par ex)
                 $aff_ac .= "\n{
                   \"name\": \"".$ra["initiative_titre"]."\",
-                  \"size\": ". strlen($ra["initiative_titre"])*strlen($ra["initiative_titre"]).",
+                  \"size\": ". $size.",
                   \"url\": \"fiche_action.php?id=".$ra["id"]."\"}";
               }
               $aff_ru .= $aff_ac;

@@ -105,7 +105,8 @@
             .padding(7)   /* espacement entre les cercles */
             .size([diameter - margin, diameter - margin]) // taille cercle root dans son conteneur
             .value(function (d) {
-            return d.size; /* taille des feuilles */
+            	//if(d.size)
+            return d.size*20; /* taille des feuilles */
         });
 
 
@@ -182,7 +183,7 @@
                 return d.parent === root ? 1 : 0; // opacité transparent si non feuille 
             })
                 .style("display", function (d) {
-                return d.parent === root ? null : null; // on laisse tjs la visibilité des labels pour assurer le troncage avec la fonction getComputedLength
+                return d.parent === root ? null : "none"; // on laisse tjs la visibilité des labels pour assurer le troncage avec la fonction getComputedLength
                 										// on joue seulement sur l'opacité pour les voir ou non
             })
                 .text(function (d) {  
@@ -192,30 +193,6 @@
                  // }
                 
             });
-
-			/*var text = svg.selectAll("text")
-				.data(nodes)
-				.enter().append("foreignObject")
-				.attr('width',150)
-				.attr('height',130)
-				//.attr("class","label")
-				/*.style("fill-opacity", function (d) {
-                return d.parent === root ? 1 : 0; // opacité transparent si non feuille 
-            })
-                .style("display", function (d) {
-                return d.parent === root ? null : "none";
-            })
-                .append("xhtml:body")
-                .html(function(d){
-                	var thisNode = d3.select(this);
-                	return '<div style="width: 150px;"> Mon texte </div>'});
-                /*.text(function (d) {  
-                  var thisNode = d3.select(this);
-                 // if(d.children){
-                    return d.name;
-                 // }
-                
-            });*/
 
 
             // ================================ Dimensions du volet ===============================================
@@ -265,6 +242,7 @@
 			};
 		    svg.selectAll('text').each(insertLinebreaks); */
 		     function wrap(d){
+		     	//alert(rayon);
 		    	var el = d3.select(this);
 			    var words = d.name.split(/\s+/).reverse();  // découpage en mots + reverse : premier mot devient le dernier et le dernier devient le premier
 			    el.text('');
@@ -283,7 +261,8 @@
 		    		line.push(word);  // ajoute le mot à la ligne
 		    		tspan.text(line.join(" "));  // ajoute la ligne en texte
 		    		//alert(d.name+" "+tspan.node().getBBox().height); // IMPORTANT
-		    		alert(d.name+" diam : "+d.r*2+"textlen : "+tspan.node().getComputedTextLength());
+		    		//alert(d.name+" diam : "+d.r*2+"textlen : "+tspan.node().getComputedTextLength());
+
 		    		if (tspan.node().getComputedTextLength() >= d.r*2){  // si la taille du texte après ajout d'un mot dépasse le diamètre (r*2) du cercle, on retire le mot et on va à la ligne
 		    			line.pop(); 
 		    			tspan.text(line.join(" ")); 
@@ -308,8 +287,10 @@
 		    		}
 		    	}
 		    };
-		    svg.selectAll('text').each(wrap);
-
+		    //svg.selectAll('text').each(wrap);
+		     /*svg.selectAll('text').each(function(d){
+		     	return wrap(d);
+		     });*/
 
         	var node = svg.selectAll("circle,text");
 
@@ -342,7 +323,7 @@
                     .tween("zoom", function (d) {
                     var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]);
                     return function (t) {
-                        zoomTo(i(t));
+                         zoomTo(i(t));
                     };
                 });
 
@@ -358,9 +339,12 @@
                     if (d.parent === focus) this.style.display = "inline"; // on laisse tjs la visibilité des labels pour assurer le troncage avec la fonction getComputedLength
                 })															// on joue seulement sur l'opacité pour les afficher
                     .each("end", function (d) {
-                    if (d.parent !== focus) this.style.display = "inline"; 
+                    if (d.parent !== focus) this.style.display = "none"; 
                 })
-                   // .each(setTimeout(wrap,8000));
+                   /* setTimeout(function(){
+                    	var txt = svg.selectAll("text").each(wrap);
+                    },100)*/;
+
             }
 
             function zoomTo(v) {
