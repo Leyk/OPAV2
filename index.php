@@ -70,7 +70,6 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="js/foundation.min.js"></script>
-   <!-- <script src="js/foundation/foundation.tooltip.js"></script>-->
     <script>
       $(document).foundation();
 
@@ -117,9 +116,9 @@
             .append("g")  /* pour grouper */
             .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
-        var tooltip = d3.select("#svgdiv")
+        var myTooltip = d3.select("#svgdiv")
 		    .append("div")
-		    .attr("class", "tooltip")
+		    .attr("class", "myTooltip")
 			.style("opacity", 0);
 
             var focus = root,   /* focus initial sur le root (variable contenant tout l'arbre de données) */
@@ -145,17 +144,17 @@
                
                 function mouseover(d) {
                 	if(d3.select(this).classed("node--leaf")){
-					    tooltip.html(d.name)
+					    myTooltip.html(d.name)
 					        /*.style("left", (d3.event.pageX + 10) + "px")
 					        .style("top", (d3.event.pageY - 10) + "px")*/
 					        .style("left", (d.x)+"px")
-					        .style("top", (d.y)+"px")
+					        .style("top", (d.y) +"px")
 					        .style("opacity", 1);
 				     }
 				};
 
 				function mouseout(d) {      
-				    tooltip.style("opacity", 0);
+				    myTooltip.style("opacity", 0);
 				}
 
                 function clickFct(d,i) {  /* i = place dans l'arbre Json (0 = forcesvives = root)*/
@@ -183,7 +182,8 @@
                 return d.parent === root ? 1 : 0; // opacité transparent si non feuille 
             })
                 .style("display", function (d) {
-                return d.parent === root ? null : "none";
+                return d.parent === root ? null : null; // on laisse tjs la visibilité des labels pour assurer le troncage avec la fonction getComputedLength
+                										// on joue seulement sur l'opacité pour les voir ou non
             })
                 .text(function (d) {  
                   var thisNode = d3.select(this);
@@ -264,10 +264,9 @@
 			    }
 			};
 		    svg.selectAll('text').each(insertLinebreaks); */
-		    var wrap = function(d){
+		     function wrap(d){
 		    	var el = d3.select(this);
 			    var words = d.name.split(/\s+/).reverse();  // découpage en mots + reverse : premier mot devient le dernier et le dernier devient le premier
-			   // alert(words);
 			    el.text('');
 			    var	word,
 			    	saveSpan = [],
@@ -356,14 +355,12 @@
                     return d.parent === focus ? 1 : 0;
                 })
                     .each("start", function (d) {
-                    if (d.parent === focus) this.style.display = "inline";
-                })
-                    //.each(wrap);
+                    if (d.parent === focus) this.style.display = "inline"; // on laisse tjs la visibilité des labels pour assurer le troncage avec la fonction getComputedLength
+                })															// on joue seulement sur l'opacité pour les afficher
                     .each("end", function (d) {
-                    if (d.parent !== focus) this.style.display = "none";
-                });
-
-                   //transition.selectAll('text').each(wrap);
+                    if (d.parent !== focus) this.style.display = "inline"; 
+                })
+                   // .each(setTimeout(wrap,8000));
             }
 
             function zoomTo(v) {
@@ -372,20 +369,16 @@
                 node.attr("transform", function (d) {
                     return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")";
                 });
-                circle.attr("r", function (d) {
+                circle.attr("r", function (d) {  // modification du rayon
                     return d.r * k;
                 });
             }
-        d3.select(self.frameElement).style("height", diameter + "px");
+        	d3.select(self.frameElement).style("height", diameter + "px");
          
 
 
-        </script>
-        <script>
-          //$(document).foundation('tooltip', 'reflow'); </script>
-       
+        </script>     
         <script src="//cdn.transifex.com/live.js"></script>
-
   </body>
 
   <footer>
