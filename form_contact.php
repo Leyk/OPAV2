@@ -137,9 +137,8 @@
 	          		$resultat.css('display','block');
 	          	}
 	          	else{
-	          		alert(data);
-	          		$resultat.html("<p>Erreur...</p>");
-	          		$resultat.css('display','block');
+	          		$erreur.html("<p>"+data+"</p>");
+	          		$erreur.css('display','block');
 	          	}
 	          },
 	          'text' // Format des données reçues : pour recevoir "Success" ou "Failed"

@@ -33,8 +33,11 @@
     </header>
    <div class="row">
     <nav class="large-4 columns" id="volet">
-    	<h1>Texte</h1>
-    
+    	<h2>Navigation de la Constellation</h2>
+    	<br/>
+    	<p>Cliquez sur les cercles pour naviguer de centre d'intérêt en centre d'intérêt, de rubrique en rubrique, et afficher la fiche de l'action que vous souhaitez consulter.</p> 
+    	<p>Lorsque les coordonnées de l'initiateur d'une action sont disponibles, un formulaire vous permet de le contacter via la fiche détail de l'action.</p>
+    	<p>De même, si vous souhaitez contacter ou être contacté par les forces vives d'une action, remplissez le formulaire via sa fiche.</p>
      <div id="interac">
         <ul id="interactions" class="hide">
           <li class="ajout">Ajouter une action<span class="fi-align-left"></span></li>
@@ -183,16 +186,14 @@
                 return d.parent === root ? 1 : 0; // opacité transparent si non feuille 
             })
                 .style("display", function (d) {
-                return d.parent === root ? null : "none"; // on laisse tjs la visibilité des labels pour assurer le troncage avec la fonction getComputedLength
-                										// on joue seulement sur l'opacité pour les voir ou non
+                return d.parent === root ? "inline" : "none"; 
+                										
             })
                 .text(function (d) {  
                   var thisNode = d3.select(this);
-                 // if(d.children){
                     return d.name;
-                 // }
-                
             });
+               // .call(wrap);
 
 
             // ================================ Dimensions du volet ===============================================
@@ -287,7 +288,7 @@
 		    		}
 		    	}
 		    };
-		    //svg.selectAll('text').each(wrap);
+		   svg.selectAll('text').each(wrap);
 		     /*svg.selectAll('text').each(function(d){
 		     	return wrap(d);
 		     });*/
@@ -328,7 +329,7 @@
                 });
 
 
-                transition.selectAll("text")
+                var t = transition.selectAll("text")
                     .filter(function (d) {
                     return d.parent === focus || this.style.display === "inline";
                 })
@@ -336,14 +337,14 @@
                     return d.parent === focus ? 1 : 0;
                 })
                     .each("start", function (d) {
-                    if (d.parent === focus) this.style.display = "inline"; // on laisse tjs la visibilité des labels pour assurer le troncage avec la fonction getComputedLength
-                })															// on joue seulement sur l'opacité pour les afficher
+                    if (d.parent === focus) this.style.display = "inline"; 
+                })															
                     .each("end", function (d) {
                     if (d.parent !== focus) this.style.display = "none"; 
                 })
-                   /* setTimeout(function(){
-                    	var txt = svg.selectAll("text").each(wrap);
-                    },100)*/;
+                   setTimeout(function(){
+                    	var txt = transition.selectAll("text").each(wrap);
+                    },100);
 
             }
 
