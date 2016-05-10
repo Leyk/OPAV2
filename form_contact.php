@@ -1,4 +1,5 @@
 <!doctype html>
+<?php include_once("inc/fonctions_globales.php"); ?>
 <html class="no-js" lang="fr">
   <head>
     <meta charset="utf-8" />
@@ -25,6 +26,8 @@
               <option value="diffusion">Toutes les personnes en lien avec ce projet</option>
             </select>
           </fieldset>
+          <div id ="info">
+          </div>
         </div>
       </div>
       <div id="formcontact-contenu" class="row hide">
@@ -47,10 +50,18 @@
 
     <?php 
     if(isset($mail_initiateur)){ // Vérification si une adresse mail est dispo pour contacter l'initiateur d'un projet
-      $existMail = true ;
-    } else {
-       $existMail = false;
+      $existMailInitiateur = true;
+    } 
+    else {
+       $existMailInitiateur = false;
     }
+    if (mailListeDiff($id)){
+      $existeMailDiff = true;
+    }
+    else {
+      $existeMailDiff = false;
+    }
+
     ?>
 
   <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
@@ -69,9 +80,11 @@
           $champ = $('.champ'),
           $erreur = $('#erreur'),
           $resultat = $('#resultat'),
+          $info = $('#info'),
           $envoi = $('#envoyer'),
           $id = '<?php echo $id; ?>';
-          $existe_mail = '<?php echo $existMail; ?>';
+          $existe_mail_initiateur = '<?php echo $existMailInitiateur; ?>';
+          $existe_mail_diff = '<?php echo $existeMailDiff; ?>';
           $dest = $('#dest_msg option:selected').val();
       // Ajustement de la taille des textarea
      /* $('textarea').autosize();*/
@@ -81,19 +94,40 @@
         $dest = $('#dest_msg option:selected').val();
         $erreur.css('display','none');
         $resultat.css('display','none');
-        $('html, body').animate({ /* ajuste l'écran principal sur l'ouverture du formulaire */
-          scrollTop: $("#formcontact").offset().top
-        }, 1000);
-        $('#volet').animate({ /* ajuste l'écran de navigation (volet) sur l'ouverture du formulaire */
-          scrollTop: $("#formcontact").offset().top
-        }, 1000);
+        $info.css('display','none');
         if($(this).val() === "initiateur"){
-          if(!$existe_mail){
+          if(!$existe_mail_initiateur){
             $erreur.css('display','block');
             $erreur.html("<p>Il n'y a malheureusement aucune adresse mail valide pour cet initiateur ! </p>");
             $('#formcontact-contenu').slideUp(); /* ferme le corps du formulaire */
-          } else {
+          } 
+          else {
+            $('html, body').animate({ /* ajuste l'écran principal sur l'ouverture du formulaire */
+              scrollTop: $("#formcontact").offset().top
+            }, 1000);
+            $('#volet').animate({ /* ajuste l'écran de navigation (volet) sur l'ouverture du formulaire */
+             scrollTop: $("#formcontact").offset().top
+            }, 1000);
             $('#formcontact-contenu').slideDown(); /* ouvre le corps du formulaire */
+          }
+        }
+        else if($(this).val() === "diffusion") {
+          // test si mails ds liste
+          if(!$existe_mail_diff){ // s'il n'y a pas de mails dans la liste de diffusion
+            $erreur.css('display','block');
+            $erreur.html("<p>Il n'y a malheureusement aucune adresse mail valide dans la liste de diffusion de ce projet ! </br> Vous pouvez cependant entrer votre adresse mail afin de pouvoir être contacté par d'autres personnes intéressées par cette action à l'avenir.</p> ");
+          } 
+          else { // s'il y a des mails de contact dans la liste de diffusion
+            $info.css('display','block');
+            $info.html("En remplissant ce formulaire, votre adresse mail sera conservée et ajoutée à la liste de diffusion de cette action afin que vous puissiez être contacté par d'autres personnes intéressées par cette action à l'avenir.");
+            //$info.css('font-size','0.7rem');
+            $('#formcontact-contenu').slideDown(); /* ouvre le corps du formulaire */
+            $('html, body').animate({ /* ajuste l'écran principal sur l'ouverture du formulaire */
+              scrollTop: $("#formcontact").offset().top
+            }, 1000);
+            $('#volet').animate({ /* ajuste l'écran de navigation (volet) sur l'ouverture du formulaire */
+             scrollTop: $("#formcontact").offset().top
+            }, 1000);
           }
         }
         else{
@@ -115,6 +149,7 @@
         e.preventDefault(); // on annule la fonction par défaut du bouton d'envoi
         $erreur.css('display','none');
         $resultat.css('display','none');
+        $info.css('display','none');
         var nom = verifier($nom_personne);
         var mail = verifier($mail_personne);
         var mailok = validateEmail($mail_personne);
@@ -133,7 +168,7 @@
 	          },
 	          function(data){ // fonction qui va gérer le retour
 	          	if(data == "Success"){
-	          		$resultat.html("<p>Le mail a été envoyé avec succès ! </p>");
+	          		$resultat.html("<p>Votre message a été envoyé avec succès ! </p>");
 	          		$resultat.css('display','block');
 	          	}
 	          	else{

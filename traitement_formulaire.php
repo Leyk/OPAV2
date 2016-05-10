@@ -113,8 +113,52 @@ if(!isset($erreur)){
 		}
 
 	}
-	else if ($destinataire == "diffusion"){
+	else if ($destinataire == "diffusion"){ // Cas où l'on souhaite contacter toutes les personnes intéressées par ce projet
+		// récup des adresses auxquelles envoyer le mail
+		$sql = "SELECT posteur_email FROM actions_personnes ap, actions_initiatives_personnes aip WHERE ap.id = aip.id_personne AND id_initiative=".$idproj ;
+		$rs = $connexion->prepare($sql);
+		$rs->execute() or die ("Erreur : ".__LINE__." : ".$sql);
+		$nb_lignes = $rs->rowCount();
+		$succ = false; // déterminera si au moins un mail a pu être envoyé
+		$resultat = '';
+		if($nb_lignes){
+			while ($r = $rs->fetch(PDO::FETCH_ASSOC)){  // parcours de l'ensemble des adresses mails dispo dans la "liste de diffusion"
+			 	$mail = $r['posteur_email'];
 
+			 	// Vérification validité des adresses mail récupérées
+				if (!preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#i", preg_replace("/[^a-z].-_@/i",'', strtolower($mail)))){
+					$resultat = "Mail invalide";
+				} 
+				else { // mail est valide
+					if(true){  // mail est envoyé
+						$succ = true;
+						$resultat = "Success";
+
+					} 
+					else{  // erreur dans l'envoi du mail
+						$resultat = "Echec envoi";
+					}
+				}
+			}
+			if($succ){
+				echo "Success";
+			}
+			else{
+				if($resultat === "Mail invalide"){ // Toutes les adresses mails sont valides
+						echo "Erreur : les mails récupérés sont invalides. Aucun mail n'a pu être envoyé." ;
+				} 
+				else if ($resultat === "Echec envoi") { // Au moins une adresse n'est pas valide
+
+					echo "Erreur : echec envoi, aucun mail n'a pu être envoyé." ;
+				}
+				else {
+					echo "Erreur dans la récupération des adresses mails disponibles.";
+				}
+			}
+		} 
+		else {
+			echo "Erreur : aucune adresse mail n'a pu être récupérée pour cette action.";
+		}
 	} 
 	else {
 		echo "Erreur dans le choix du destinataire dans la liste";

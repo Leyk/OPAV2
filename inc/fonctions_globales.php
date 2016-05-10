@@ -7,6 +7,8 @@
  *  Sortie : string $date_fr : chaine formaté
 ------------------------------------------------------------------------ 
  */
+
+
 function datefr($date_us,$avecheure=false) { 
   $annee = substr($date_us,0,4);
   $mois = substr($date_us,5,2);
@@ -51,4 +53,30 @@ function coupe_chaine($chaine, $nb_car,$aff_suite=false)
  // Renvoi url rewritée
  return $chaine;
 }
+
+// Cette fonction vérifie si pour une action donnée, au moins une adresse mail est valide
+// Return false si aucune adresse mail valide
+// Return true si au moins une adresse mail est valide
+function mailListeDiff($idproj){
+  global $connexion;
+  $sql = "SELECT posteur_email FROM actions_personnes ap, actions_initiatives_personnes aip WHERE ap.id = aip.id_personne AND id_initiative=".$idproj ;
+  $rs = $connexion->prepare($sql);
+  $rs->execute() or die ("Erreur : ".__LINE__." : ".$sql);
+  $nb_lignes = $rs->rowCount();
+  $succ = false; // déterminera si au moins un mail est valide
+  if($nb_lignes){
+    while ($r = $rs->fetch(PDO::FETCH_ASSOC) and $succ == false){  // parcours de l'ensemble des adresses mails dispo dans la "liste de diffusion"
+      $mail = $r['posteur_email'];
+      // Vérification validité des adresses mail récupérées
+      if (preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#i", preg_replace("/[^a-z].-_@/i",'', strtolower($mail)))){
+        $succ = true; // le mail est valide
+      } 
+    }
+    return $succ; // false si aucun mail vérifié n'est valide, true si au moins une est valide
+  }
+  else { // aucune ligne = aucune adresse mail
+    return false;
+  }
+}
+
 ?>

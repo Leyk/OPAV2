@@ -455,13 +455,18 @@ p{
 #erreur {
   display: none;
   color:red;
-  text-align: center;
 }
 
 #resultat{
   display: none;
   color: green;
-  text-align: center;
+}
+
+#info{
+  display: none;
+  font-size: 0.7rem;
+  color: black;
+  text-align: justify;
 }
 
 div.myTooltip {

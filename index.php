@@ -205,13 +205,13 @@
 
 		    		}
 		    		else if(window.matchMedia("(min-width: 992px)").matches){
-		    			result.css('height',300);
+		    			result.css('height',400);
 		    		}
 		    		else if(window.matchMedia("(min-width: 768px)").matches){
-		    			result.css('height',200);
+		    			result.css('height',300);
 		    		}
 		    		else{
-		    			result.css('height',100);
+		    			result.css('height',200);
 		    		}
 	    		}
     		}
