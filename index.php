@@ -242,10 +242,10 @@
 			    }
 			};
 		    svg.selectAll('text').each(insertLinebreaks); */
-		     function wrap(d){
-		     	//alert(rayon);
-		    	var el = d3.select(this);
-			    var words = d.name.split(/\s+/).reverse();  // découpage en mots + reverse : premier mot devient le dernier et le dernier devient le premier
+		     function wrap(name, rayon, el){
+		    	//var el = d3.select(this);
+			    //var words = d.name.split(/\s+/).reverse();  // découpage en mots + reverse : premier mot devient le dernier et le dernier devient le premier
+			    var words = name.split(/\s+/).reverse();
 			    el.text('');
 			    var	word,
 			    	saveSpan = [],
@@ -255,7 +255,6 @@
 			    	y = el.attr("y"),
 			    	valY = 0,
 			    	dy = parseFloat(el.attr("dy"))
-			    
 			    var tspan = el.append("tspan").attr("x",0).attr("y",valY).attr("dy", 0);
 			    saveSpan.push(tspan);  // pour garder en mémoire les différents tspan pour un même titre (sert à pouvoir les modifier si nb ligne > 3) (à voir pour meilleure façon de faire)
 		    	while (word = words.pop()){  // tant qu'il y a des mots (parcours de tous les mots)
@@ -264,7 +263,7 @@
 		    		//alert(d.name+" "+tspan.node().getBBox().height); // IMPORTANT
 		    		//alert(d.name+" diam : "+d.r*2+"textlen : "+tspan.node().getComputedTextLength());
 
-		    		if (tspan.node().getComputedTextLength() >= d.r*2){  // si la taille du texte après ajout d'un mot dépasse le diamètre (r*2) du cercle, on retire le mot et on va à la ligne
+		    		if (tspan.node().getComputedTextLength() >= rayon*2){  // si la taille du texte après ajout d'un mot dépasse le diamètre (r*2) du cercle, on retire le mot et on va à la ligne
 		    			line.pop(); 
 		    			tspan.text(line.join(" ")); 
 		    			line = [word];
@@ -288,24 +287,12 @@
 		    		}
 		    	}
 		    };
-		   svg.selectAll('text').each(wrap);
-		     /*svg.selectAll('text').each(function(d){
-		     	return wrap(d);
-		     });*/
+		   //svg.selectAll('text').each(wrap);
+		    svg.selectAll('text').each(function(d){
+		     	return wrap(d.name, d.r, d3.select(this))
+		     });
 
         	var node = svg.selectAll("circle,text");
-
-          	/* permet d'affecter les text en hyperlink pour chaque noeud feuille (action) : penser à modifier le CSS en conséquence */
-          	/* node.each(function(d) {
-              var thisNode = d3.select(this);
-              if (!d.children) {   //si c'est une feuille 
-                  thisNode.append("a")
-                  .attr('xlink:href',function(d) { return d.url ;})
-                  .attr('data-reveal-id','myVolet')
-                  .attr('data-reveal-ajax','true')
-                    .text(function(d){return d.name;});           
-              }
-            });*/
 
             d3.select("body")
                 .style("background", color(-2))  /* change la couleur du fond avec une couleur proche du cercle root (voir plages plus haut)*/
@@ -322,12 +309,11 @@
                 var transition = d3.transition()
                     .duration(d3.event.altKey ? 7500 : 750)
                     .tween("zoom", function (d) {
-                    var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]);
+                    var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]); // i contient les coordonnées du point à zoomer
                     return function (t) {
                          zoomTo(i(t));
                     };
                 });
-
 
                 var t = transition.selectAll("text")
                     .filter(function (d) {
@@ -342,10 +328,14 @@
                     .each("end", function (d) {
                     if (d.parent !== focus) this.style.display = "none"; 
                 })
-                   setTimeout(function(){
+                   /*setTimeout(function(){
                     	var txt = transition.selectAll("text").each(wrap);
-                    },100);
-
+                    },100);*/
+				setTimeout(function(){
+					var txt = transition.selectAll('text').each(function(d){
+	     			return wrap(d.name, d.r, d3.select(this))
+	    			});
+				},100)
             }
 
             function zoomTo(v) {
@@ -359,13 +349,9 @@
                 });
             }
         	d3.select(self.frameElement).style("height", diameter + "px");
-         
-
-
         </script>     
         <script src="//cdn.transifex.com/live.js"></script>
   </body>
-
   <footer>
   <div class="row">
     <div class="large-12 columns">
