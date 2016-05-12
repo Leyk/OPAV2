@@ -1,15 +1,5 @@
-<!doctype html>
-<?php include_once("inc/fonctions_globales.php"); ?>
-<html class="no-js" lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Outil de mise en synergie</title>
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/foundation.css" />
-    <link rel="stylesheet" href="css/fv.css" />
-    <link rel="stylesheet" href="css/foundation-icons.css" />
-  </head>
+<?php include_once("inc/fonctions_globales.php");
+include_once ("vues/entete.php"); ?>
   <body>
     <div id="erreur">
     </div>
@@ -64,11 +54,11 @@
 
     ?>
 
-  <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
     <script src="js/vendor/jquery.js"></script>
     <script src="js/foundation.min.js"></script>
-    <script src="js/foundation/foundation.reveal.js"></script>
     <script src="js/jquery.autosize.min.js"></script>
+
+
     <script>
     $(document).foundation();
 
@@ -86,8 +76,6 @@
           $existe_mail_initiateur = '<?php echo $existMailInitiateur; ?>';
           $existe_mail_diff = '<?php echo $existeMailDiff; ?>';
           $dest = $('#dest_msg option:selected').val();
-      // Ajustement de la taille des textarea
-     /* $('textarea').autosize();*/
 
       // affichage du formulaire
       $('#dest_msg').change(function(){
@@ -116,6 +104,7 @@
           if(!$existe_mail_diff){ // s'il n'y a pas de mails dans la liste de diffusion
             $erreur.css('display','block');
             $erreur.html("<p>Il n'y a malheureusement aucune adresse mail valide dans la liste de diffusion de ce projet ! </br> Vous pouvez cependant entrer votre adresse mail afin de pouvoir être contacté par d'autres personnes intéressées par cette action à l'avenir.</p> ");
+            $('#formcontact-contenu').slideUp(); /* ferme le corps du formulaire */
           } 
           else { // s'il y a des mails de contact dans la liste de diffusion
             $info.css('display','block');
@@ -209,4 +198,4 @@
     });
     </script>
   </body>
-</html>
+</html> <!-- on n'inclut pas le footer car cette page est affichée dans une autre (volet) -->

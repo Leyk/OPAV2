@@ -384,8 +384,6 @@ nav {
 
     text-anchor: middle;  /* alignement du texte par rapport au milieu */
     pointer-events: none;
-
-   /* font: 1.2em "Arial Black"; /* grosse police pour lisibilité */
     font-family:  inherit;
     font-weight: bold;
     font-size: 1.4em;
@@ -421,32 +419,8 @@ p{
 #volet {
   background: white;
   margin-left: 0;
-  /*height: 900px;*/
   overflow: scroll;
-  /*text-align: justify;*/
- /* border: 1px black groove;*/
 }
-    /* dans les 3 cas ci-dessous le volet est affiché au dessus de la constellation */
-   /* @media (min-width: 1px){
-      #volet{
-        height: 100px;
-      }
-    }
-    @media (min-width: 768px) {
-        #volet {
-            height: 200px;
-        }
-    }
-    @media (min-width: 992px) {
-        #volet {
-            height: 300px;
-        }
-    }
-    /*le volet est affiché à gauche de la constellation */
-    /*@media (min-width: 1026px) {
-        #volet {
-            height: 1150px;
-        }*/
 
 .row {
   max-width: 100%;
@@ -471,7 +445,7 @@ p{
 
 div.myTooltip {
     display: inline;
-    position: absolute; /*very important*/
+    position: absolute; 
     text-align: left;    
     padding: 5px 10px 5px 10px;
     font-size: 0.875rem;

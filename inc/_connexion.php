@@ -10,4 +10,7 @@ catch(Exception $e)
     echo 'Erreur : '.$e->getMessage().'<br />';
     echo 'N° : '.$e->getCode();
 }
+
+
+
 ?>

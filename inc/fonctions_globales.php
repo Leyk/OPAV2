@@ -54,6 +54,90 @@ function coupe_chaine($chaine, $nb_car,$aff_suite=false)
  return $chaine;
 }
 
+
+// Cette fonction vérifie si une adresse mail est valide
+// Return false si adresse mail non valide
+// Returne true si adresse mail valide
+function valideMail($mail){
+  if (preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#i", preg_replace("/[^a-z].-_@/i",'', strtolower($mail)))){
+    return true; // le mail est valide
+  }
+  else {
+    return false;
+  }
+}
+
+// Envoi un email à partir des infos passées en paramètre
+function envoiMail($mail_dest, $posteur_nom, $posteur_email, $posteur_msg){
+  if (!preg_match("#^[a-z0-9._-]+@(hotmail|live|msn).[a-z]{2,4}$#", $mail_dest)){
+          $passage_ligne = "\r\n";
+        }
+        else {
+          $passage_ligne = "\n";
+        }
+        // ===== Déclaration des messages au format texte et au format HTML
+        $message_txt = $posteur_msg;
+        $message_html = "<html><head></head><body>".$posteur_msg."</body></html>";
+        // ======================================
+
+        // ====== Création de la boundary
+        $boundary = "-----=".md5(rand());
+        // ======================================
+        
+        // ====== Définition du sujet
+        $sujet = "Forces Vives Contact";
+        // ======================================
+
+        // ====== Création du header du mail ====
+        $header = "From: \"".$posteur_nom."\"<".$posteur_email.">".$passage_ligne;   // A changer
+        $header.= "Reply-to: \"".$posteur_nom."\"<".$posteur_email.">".$passage_ligne;
+        $header.= "MIME-Version: 1.0".$passage_ligne;
+        $header.= "Content-Type: multipart/alternative;".$passage_ligne."boundary=\"$boundary\"".$passage_ligne."boundary=\"$boundary\"".$passage_ligne;
+        // ======================================
+
+        // ====== Création du message
+        $message = $passage_ligne."--".$boundary.$passage_ligne;
+        // Ajout message au format texte
+        $message.= "Content-Type: text/plain; charset=\"ISO-8859-1\"".$passage_ligne;
+        $message.= "Content-Transfer-Encoding: 8bit".$passage_ligne;
+        $message.= $passage_ligne.$message_txt.$passage_ligne;
+        // ======================================
+        $message.= $passage_ligne."--".$boundary.$passage_ligne;
+        // Ajout message au format HTML
+        $message.= "Content-Type: text/html; charset=\"ISO-8859-1\"".$passage_ligne;
+        $message.= "Content-Transfer-Encoding: 8bit".$passage_ligne;
+        $message.= $passage_ligne.$message_html.$passage_ligne;
+        // =======================================
+        $message.= $passage_ligne."--".$boundary."--".$passage_ligne;
+        $message.= $passage_ligne."--".$boundary."--".$passage_ligne;
+        //=====Envoi de l'e-mail
+        if(true /*mail($mail_dest,$sujet,$message,$header)*/){   // A UTILISER SUR SERVEUR
+          return true;
+        }
+        else{
+          return false;
+        }
+
+        /*
+        // ======= deuxième méthode =======
+        $email = new PHPMailer();
+        $email->IsSMTP();
+        $email->Host='hote_smtp';
+        $email->From=$posteur_email;
+        $email->AddAddress($mail_dest);
+        $email->AddReplyTo=$posteur_email;
+        $email->Subject='Contact forces vives';
+        $email->Body=$posteur_msg;
+        if(!$email->Send()){
+          echo $email->ErrorInfo;
+        } else{
+          $email->SmtpClose();
+          unset($email);
+        }
+          */
+}
+
+
 // Cette fonction vérifie si pour une action donnée, au moins une adresse mail est valide
 // Return false si aucune adresse mail valide
 // Return true si au moins une adresse mail est valide
@@ -68,7 +152,7 @@ function mailListeDiff($idproj){
     while ($r = $rs->fetch(PDO::FETCH_ASSOC) and $succ == false){  // parcours de l'ensemble des adresses mails dispo dans la "liste de diffusion"
       $mail = $r['posteur_email'];
       // Vérification validité des adresses mail récupérées
-      if (preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#i", preg_replace("/[^a-z].-_@/i",'', strtolower($mail)))){
+      if (valideMail($mail)){
         $succ = true; // le mail est valide
       } 
     }
@@ -77,6 +161,16 @@ function mailListeDiff($idproj){
   else { // aucune ligne = aucune adresse mail
     return false;
   }
+}
+
+// Renvoi l'adresse mail de l'initiateur du projet passé en paramètre
+function getMailInitiateur($idproj){
+  global $connexion;
+  $sql = "SELECT posteur_email FROM actions_initiatives WHERE id=".$idproj ;
+  $rs = $connexion->prepare($sql);
+  $rs->execute() or die ("Erreur : ".__LINE__." : ".$sql);
+  $ligne = $rs->fetch();
+  return $ligne;
 }
 
 ?>

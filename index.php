@@ -1,36 +1,13 @@
 <?php
-  require_once "inc/_var_fv.php";
+
+/*require_once ("include/fonctions.php");
+require_once ("include/class.pdoluxcar.php");
+$pdo = PdoLxc::getPdoLxc();*/
+include_once ("vues/entete.php");
+include_once ("vues/menu.php");
+
 ?>
-<!doctype html>
-<html class="no-js" lang="fr" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Outil de mise en synergie</title>
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/foundation.css" />
-    <link rel="stylesheet" href="css/fv.css" />
-    <link rel="stylesheet" href="css/foundation-icons.css" />
-	<!--Import Google Icon Font-->
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  </head>
   <body class="homecarto">
-   
-    <header>
-      <div class="row">
-        <div class="large-12 columns">
-          <h2>Un outil de</h2>
-          <h1 class="logo">Mise en <span>Synergie</span></h1>
-        </div>
-      </div>
-      <div id="menu" class="row">
-        <div class="large-12 columns">
-          <a href="index.php" title="Constellation">Constellation</a> | 
-          <a href="inscrivez-vous.php" title="Inscrivez-vous">Inscrivez-vous</a> | 
-          <a href="liste-projets.php" title="Liste des projets">Liste des projets</a>
-        </div>
-      </div>
-    </header>
    <div class="row">
     <nav class="large-4 columns" id="volet">
     	<h2>Navigation de la Constellation</h2>
@@ -68,11 +45,11 @@
         <div id="svgdiv" class = "large-8 columns">
     	</div>
     </div>
-    <div id="myVolet" class="hide reveal-modal medium" data-reveal>
-    </div>
+    <!-- ======= Imports Scripts pour d3 js =========== -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="js/foundation.min.js"></script>
+    <!-- ======= Imports Scripts pour d3 js =========== -->
     <script>
       $(document).foundation();
 
@@ -81,35 +58,29 @@
         $("#boutonactions").click(function() {
           $("#interactions").slideToggle();
         });
-
-        $('header .logo').animate({ letterSpacing: '10px' }, 500);
-        setTimeout(function() { $('header .logo').removeAttr("style"); }, 1000);
-
       });      
     </script>
     <script>
 
-         <?php echo affiche_tree(); ?>   // Affichage en mode fichier JSON des données 
+        <?php echo affiche_tree(); ?>   // Affichage en mode fichier JSON des données 
 
         var margin = 1,
             diameter = 900;   // diamètre minimum du cercle "root"
             if(window.innerWidth >= 1700){  // si grand écran, root plus grand
             	diameter = window.innerWidth/1.7;
-            	//$('#volet').css('height',diameter + "px");  // adaptation volet avec taille root
             }
            
 
         var color = d3.scale.linear()
             .domain([-1, 5])  // plages de couleur (du plus clair au plus foncé)
-            .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
+            .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])  // Pour le dégradé
             .interpolate(d3.interpolateHcl);
 
         var pack = d3.layout.pack()
-            .padding(7)   /* espacement entre les cercles */
+            .padding(7)   // espacement entre les cercles 
             .size([diameter - margin, diameter - margin]) // taille cercle root dans son conteneur
             .value(function (d) {
-            	//if(d.size)
-            return d.size*20; /* taille des feuilles */
+            return d.size; // taille des feuilles 
         });
 
 
@@ -117,92 +88,100 @@
             .attr("width", diameter) // largeur du "rectangle" contenant le cercle root
             .attr("height", diameter) // hauteur du "rectangle" contenant le cercle root
             .attr("id","carto")
-            .append("g")  /* pour grouper */
+            .append("g")  // pour grouper 
             .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
+
+        // === Définition des tooltips ===
         var myTooltip = d3.select("#svgdiv")
 		    .append("div")
 		    .attr("class", "myTooltip")
-			.style("opacity", 0);
+			  .style("opacity", 0);  // elles sont invisibles de base
+        // =================================
 
-            var focus = root,   /* focus initial sur le root (variable contenant tout l'arbre de données) */
-                nodes = pack.nodes(root),
-                view;
+        var focus = root,   // focus initial sur le root (variable contenant tout l'arbre de données) récupérée dans le JSON
+            nodes = pack.nodes(root),
+            view;
 
-            var circle = svg.selectAll("circle")
-                .data(nodes)
-                .enter()
-                .append("circle")
-                .attr("class", function (d) {
-                return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root";
-               /* si le cercle a un parent mais pas d'enfant = feuille ; si enfant mais pas parent = root si enfant et parent = noeud */
+        var circle = svg.selectAll("circle")
+            .data(nodes)
+            .enter()
+            .append("circle")
+            .attr("class", function (d) {
+            return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root";
+           // si le cercle a un parent mais pas d'enfant = feuille ; si enfant mais pas parent = root si enfant et parent = noeud 
 
             })
-                .style("fill", function (d) {
-                return d.children ? color(d.depth) : null;
-                /* colorie les cercles par rapport à leur profondeur dans l'arbre de données (depth =0=>root). La couleur des feuilles est définie dans le css*/
-            }) 
-                .on("click", clickFct) 
-                .on("mouseover",mouseover)
-                .on("mouseout",mouseout)
-               
-                function mouseover(d) {
-                	if(d3.select(this).classed("node--leaf")){
-					    myTooltip.html(d.name)
-					        /*.style("left", (d3.event.pageX + 10) + "px")
-					        .style("top", (d3.event.pageY - 10) + "px")*/
-					        .style("left", (d.x)+"px")
-					        .style("top", (d.y) +"px")
-					        .style("opacity", 1);
-				     }
-				};
 
+            .style("fill", function (d) {
+            return d.children ? color(d.depth) : null;
+            // colorie les cercles par rapport à leur profondeur dans l'arbre de données (depth =0=>root). La couleur des feuilles est définie dans le css
+            }) 
+
+            .on("click", clickFct) 
+            .on("mouseover",mouseover)
+            .on("mouseout",mouseout)
+
+        // Fonction définissant l'apparition des tooltips lors du passage de la souris sur une feuille
+        function mouseover(d) {
+        	if(d3.select(this).classed("node--leaf")){
+	           myTooltip.html(d.name)
+	        /*.style("left", (d3.event.pageX + 10) + "px")
+		        .style("top", (d3.event.pageY - 10) + "px")*/    // NB : petit problème d'affichage des tooltips lors du zoom ...
+		        .style("left", (d.x)+"px")
+		        .style("top", (d.y) +"px")
+		        .style("opacity", 1);
+          }
+        };
+
+        // Fonction définissant la disparition des tooltips lorsque la souris sort d'une feuille
 				function mouseout(d) {      
-				    myTooltip.style("opacity", 0);
+				  myTooltip.style("opacity", 0);
 				}
 
-                function clickFct(d,i) {  /* i = place dans l'arbre Json (0 = forcesvives = root)*/
-                  if(d3.select(this).classed("node--leaf")){
-                   //$('#myVolet').foundation('reveal', 'open', d.url);  // ouverture du volet avec les infos de la fiche
-                   $('#volet').load(d.url);
-                    if (focus !== d){  /* si on n'est pas centré sur le focus, on zoom dessus */
-                      zoom(d.parent);
-                      d3.event.stopPropagation();  /* fonction qui permet le zoom */
-                    }  
-                  }
-                  else {
-                   if (focus !== d){  /* si on n'est pas centré sur le focus, on zoom dessus */
-                      zoom(d);
-                      d3.event.stopPropagation();  
-                    }  
-                  }
-                }
 
-            var text = svg.selectAll("text")
-                .data(nodes)
-                .enter().append("text")
-                .attr("class", "label")
-                .style("fill-opacity", function (d) {
-                return d.parent === root ? 1 : 0; // opacité transparent si non feuille 
+        // Fonction définissant le click sur un cercle. S'il s'agit d'une feuille, le volet d'information affiche la fiche du projet
+        function clickFct(d,i) {  // i = place dans l'arbre Json (0 = forcesvives = root)
+          if(d3.select(this).classed("node--leaf")){
+           $('#volet').load(d.url);  // chargement de la fiche projet dans le volet
+            if (focus !== d){  // si on n'est pas centré sur le focus, on zoom dessus 
+              zoom(d.parent);
+              d3.event.stopPropagation();  // fonction qui permet le zoom 
+            }  
+          }
+          else {
+           if (focus !== d){  // si on n'est pas centré sur le focus, on zoom dessus 
+              zoom(d);
+              d3.event.stopPropagation();  
+            }  
+          }
+        }
+
+        var text = svg.selectAll("text")
+            .data(nodes)
+            .enter().append("text")
+            .attr("class", "label")
+            .style("fill-opacity", function (d) {
+            return d.parent === root ? 1 : 0; // opacité transparent si non feuille 
             })
-                .style("display", function (d) {
-                return d.parent === root ? "inline" : "none"; 
-                										
+
+            .style("display", function (d) {
+            return d.parent === root ? "inline" : "none";   										
             })
-                .text(function (d) {  
-                  var thisNode = d3.select(this);
-                    return d.name;
+
+            .text(function (d) {  
+              var thisNode = d3.select(this);
+              return d.name;
             });
-               // .call(wrap);
 
 
-            // ================================ Dimensions du volet ===============================================
-            function redimensionnement(){
+        // ================================ Dimensions du volet ===============================================
+        // Fonction qui adapte la taille du volet selon la taille de la fenetre - Responsive
+        function redimensionnement(){
 	    		var result  = $('#volet');
 	    		if("matchMedia" in window) { // Détection
 		    		if(window.matchMedia("(min-width: 1026px)").matches){
 		    			result.css('height',diameter);
-
 		    		}
 		    		else if(window.matchMedia("(min-width: 992px)").matches){
 		    			result.css('height',400);
@@ -215,37 +194,20 @@
 		    		}
 	    		}
     		}
-			// On lie l'évenement resize à la fonction
-			window.addEventListener('resize',redimensionnement, false);
+  			// On lie l'évenement resize à la fonction
+  			window.addEventListener('resize',redimensionnement, false);
 
-			// Exécution de la fonction au démarrage pour avoir un retour initial
-			redimensionnement();
-			// ====================================================================================================
-			
+  			// Exécution de la fonction au démarrage pour avoir un retour initial
+  			redimensionnement();
+			  // ====================================================================================================
 
-            //retours à la ligne => changer en s'aidant du diamètre des cercles (d.r*2) pour quelque chose de propre
-           /* var insertLinebreaks = function (d) {
-			    var el = d3.select(this);
-			    var words = d.name.split(' ') // regroupement de chaque mot (séparation par ',')
-			    el.text('');
-			    for (var i = 0; i < words.length; i = i+3) {
-			    	var ch = words[i];
-			    	if(words[i+1]){
-			    		var ch = ch + ' ' + words[i+1];
-			    	}
-			    	if(words[i+2]){
-			    		var ch = ch + ' ' + words[i+2];
-			    	}
-			    	var tspan = el.append('tspan').text(ch); // on insère balise tspan autour de chaque mot
-			    	if (i > 0)
-			            tspan.attr('x', 0).attr('dy', '25'); // saut de ligne avec dy espacement vertical
-			    }
-			};
-		    svg.selectAll('text').each(insertLinebreaks); */
-		     function wrap(name, rayon, el){
-		    	//var el = d3.select(this);
-			    //var words = d.name.split(/\s+/).reverse();  // découpage en mots + reverse : premier mot devient le dernier et le dernier devient le premier
-			    var words = name.split(/\s+/).reverse();
+
+			  // ================================ Mise en forme du texte ============================================
+        // Fonction qui se charge de gérer l'affichage du texte dans les cercles de façon à ce que celui-ci ne dépasse pas en largeur
+        // NB : à améliorer pour prendre en compte la hauteur
+        // + problème à résoudre : récupérer le 'nouveau' rayon (changement de celui-ci lors du zoom)
+		    function wrap(name, rayon, el){
+			    var words = name.split(/\s+/).reverse(); // découpage en mots + reverse : premier mot devient le dernier et le dernier devient le premier
 			    el.text('');
 			    var	word,
 			    	saveSpan = [],
@@ -260,9 +222,7 @@
 		    	while (word = words.pop()){  // tant qu'il y a des mots (parcours de tous les mots)
 		    		line.push(word);  // ajoute le mot à la ligne
 		    		tspan.text(line.join(" "));  // ajoute la ligne en texte
-		    		//alert(d.name+" "+tspan.node().getBBox().height); // IMPORTANT
-		    		//alert(d.name+" diam : "+d.r*2+"textlen : "+tspan.node().getComputedTextLength());
-
+		    		//alert(d.name+" "+tspan.node().getBBox().height); // à creuser pour prendre en compte également la hauteur...
 		    		if (tspan.node().getComputedTextLength() >= rayon*2){  // si la taille du texte après ajout d'un mot dépasse le diamètre (r*2) du cercle, on retire le mot et on va à la ligne
 		    			line.pop(); 
 		    			tspan.text(line.join(" ")); 
@@ -271,6 +231,7 @@
 		    			saveSpan.push(tspan);
 		    		}
 		    	}
+          // La partie ci-dessous se charge de recentrer le texte si celui-ci est affiché sur plus de 3 lignes (à améliorer/optimiser?)
 		    	lineNumber = lineNumber+1;
 		    	if (lineNumber >= 3){ // s'il y a au moins 3 lignes, on réajuste y pour centrer verticalement les titres
 		    		if((lineNumber % 2) == 0){  // nombre de ligne pair
@@ -287,76 +248,70 @@
 		    		}
 		    	}
 		    };
-		   //svg.selectAll('text').each(wrap);
+
+        // application de la fonction wrap dés le chargement de la page
 		    svg.selectAll('text').each(function(d){
 		     	return wrap(d.name, d.r, d3.select(this))
-		     });
+		    });
 
-        	var node = svg.selectAll("circle,text");
+        var node = svg.selectAll("circle,text");
 
-            d3.select("body")
-                .style("background", color(-2))  /* change la couleur du fond avec une couleur proche du cercle root (voir plages plus haut)*/
-                .on("click", function () {   
-                 /* zoom(root);*/         /* zoom sur le cercle root si on clique à l'exterieur de tout noeud */  
-                });
+        d3.select("body")
+            .style("background", color(-2))  // change la couleur du fond avec une couleur proche du cercle root (voir plages plus haut)
+            .on("click", function () {   
+             // zoom(root);         // zoom sur le cercle root si on clique à l'exterieur de tout noeud  
+            });
 
-            zoomTo([root.x, root.y, root.r * 2 + margin]);
+        zoomTo([root.x, root.y, root.r * 2 + margin]);
 
-            function zoom(d) {
-                var focus0 = focus;
-                focus = d;
+        function zoom(d) {
+          var focus0 = focus;
+          focus = d;
 
-                var transition = d3.transition()
-                    .duration(d3.event.altKey ? 7500 : 750)
-                    .tween("zoom", function (d) {
-                    var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]); // i contient les coordonnées du point à zoomer
-                    return function (t) {
-                         zoomTo(i(t));
-                    };
-                });
+          var transition = d3.transition()
+              .duration(d3.event.altKey ? 7500 : 750)
+              .tween("zoom", function (d) {
+                var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]); // i contient les coordonnées du point à zoomer
+                return function (t) {
+                  zoomTo(i(t));
+                };
+              });
 
-                var t = transition.selectAll("text")
-                    .filter(function (d) {
-                    return d.parent === focus || this.style.display === "inline";
-                })
-                    .style("fill-opacity", function (d) {
-                    return d.parent === focus ? 1 : 0;
-                })
-                    .each("start", function (d) {
-                    if (d.parent === focus) this.style.display = "inline"; 
-                })															
-                    .each("end", function (d) {
-                    if (d.parent !== focus) this.style.display = "none"; 
-                })
-                   /*setTimeout(function(){
-                    	var txt = transition.selectAll("text").each(wrap);
-                    },100);*/
-				setTimeout(function(){
-					var txt = transition.selectAll('text').each(function(d){
-	     			return wrap(d.name, d.r, d3.select(this))
-	    			});
-				},100)
-            }
+          // affichage des textes selon si le zoom est centré sur les cercles correspondant ou non
+          var t = transition.selectAll("text")
+              .filter(function (d) {
+                return d.parent === focus || this.style.display === "inline";
+              })
+              .style("fill-opacity", function (d) {
+                return d.parent === focus ? 1 : 0;
+              })
+              .each("start", function (d) {
+                if (d.parent === focus) this.style.display = "inline"; 
+              })															
+              .each("end", function (d) {
+                if (d.parent !== focus) this.style.display = "none"; 
+              })
 
-            function zoomTo(v) {
-                var k = diameter / v[2];
-                view = v;
-                node.attr("transform", function (d) {
-                    return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")";
-                });
-                circle.attr("r", function (d) {  // modification du rayon
-                    return d.r * k;
-                });
-            }
-        	d3.select(self.frameElement).style("height", diameter + "px");
-        </script>     
-        <script src="//cdn.transifex.com/live.js"></script>
+          // Le wrap du text est réappliqué lors du zoom afin de prendre en compte le nouveau rayon des cercles
+          // La 'pause' de 100 milisec sert à s'assurer que les text ont bien été affichés (transition) pour être sur que getComputedLength (fonction wrap) ne renvoie pas 0   
+      		setTimeout(function(){
+      			var txt = transition.selectAll('text').each(function(d){
+         			return wrap(d.name, d.r, d3.select(this))
+        		});
+      		},100)
+        }
+
+        function zoomTo(v) {
+          var k = diameter / v[2];
+          view = v;
+          node.attr("transform", function (d) {
+              return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")";
+          });
+          circle.attr("r", function (d) {  // modification du rayon
+              return d.r * k;
+          });
+        }
+        d3.select(self.frameElement).style("height", diameter + "px");
+    </script>     
   </body>
-  <footer>
-  <div class="row">
-    <div class="large-12 columns">
-      <h1 class="logo">Forces<span>Vives</span></h1>
-    </div>
-  </div>
- </footer>
-</html>
+  <?php include_once("vues/foot.php"); ?>
