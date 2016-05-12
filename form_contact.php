@@ -78,12 +78,14 @@ include_once ("vues/entete.php"); ?>
           $existe_mail_diff = '<?php echo $existeMailDiff; ?>';
           $dest = $('#dest_msg option:selected').val();
 
-      // affichage du formulaire
+      // ================== affichage du formulaire =========================
       $('#dest_msg').change(function(){
         $dest = $('#dest_msg option:selected').val();
         $erreur.css('display','none');
         $resultat.css('display','none');
         $info.css('display','none');
+        $('#posteur_message').css("display","inline"); // réaffiche le champ message (cas où il a été masqué si aucun mail dans liste de diffusion de l'action)
+        // On veut contacter l'initiateur de l'action
         if($(this).val() === "initiateur"){
           if(!$existe_mail_initiateur){
             $erreur.css('display','block');
@@ -100,12 +102,20 @@ include_once ("vues/entete.php"); ?>
             $('#formcontact-contenu').slideDown(); // ouvre le corps du formulaire 
           }
         }
+        // On veut contacter les personnes présentes dans la liste de diffusion de l'action
         else if($(this).val() === "diffusion") {
-          // test si mails ds liste
+          // test si mails dans liste
           if(!$existe_mail_diff){ // s'il n'y a pas de mails dans la liste de diffusion
             $erreur.css('display','block');
             $erreur.html("<p>Il n'y a malheureusement aucune adresse mail valide dans la liste de diffusion de ce projet ! </br> Vous pouvez cependant entrer votre adresse mail afin de pouvoir être contacté par d'autres personnes intéressées par cette action à l'avenir.</p> ");
-            $('#formcontact-contenu').slideUp(); /* ferme le corps du formulaire */
+			$('#posteur_message').css("display","none"); // ouvre le corps du "sous formulaire"           
+            $('#formcontact-contenu').slideDown(); // ouvre le corps du formulaire principal
+            $('html, body').animate({ // ajuste l'écran principal sur l'ouverture du formulaire 
+              scrollTop: $("#formcontact").offset().top
+            }, 700);
+            $('#volet').animate({ // ajuste l'écran de navigation (volet) sur l'ouverture du formulaire 
+             scrollTop: $("#formcontact").offset().top
+            }, 700);
           } 
           else { // s'il y a des mails de contact dans la liste de diffusion
             $info.css('display','block');
@@ -139,12 +149,37 @@ include_once ("vues/entete.php"); ?>
         $erreur.css('display','none');
         $resultat.css('display','none');
         $info.css('display','none');
+        var champ = $('.champ');
+        champ.css({
+            borderColor:'grey'
+        });
         var nom = verifier($nom_personne);
         var mail = verifier($mail_personne);
         var mailok = validateEmail($mail_personne);
         var msg = verifier($msg_personne);
-
-        if(nom && mail && msg && mailok){
+        var dest = $('#dest_msg option:selected').val();
+        var dataOk = false;
+        
+        // ===== Vérification du remplissage des champs obligatoires, selon la sélection du destinataire ====
+        if (dest === "initiateur"){
+        	if(nom && mail && msg && mailok){
+        		dataOk = true;
+        	}
+        }
+        else if (dest === "diffusion"){
+        	if(!$existe_mail_diff){
+        		if(nom && mail && mailOk){
+        			dataOk = true;
+        		}
+        	}
+        	else {
+        		if(nom && mail && msg && mailok){
+        			dataOk = true;
+        		}
+        	}
+        }
+        // ===================================================================================================
+        if(dataOk){
          	$.post(
 	          'traitement_formulaire.php',
 	          {

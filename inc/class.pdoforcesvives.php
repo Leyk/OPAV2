@@ -67,6 +67,57 @@ class PdoForcesVives{
 		$ligne = $rs->fetchAll(PDO::FETCH_ASSOC);
 		return $ligne;
 	}	
+
+	// Vérifie si l'adresse mail passée en paramètre existe dans la liste de diffusion de l'action passée en paramètre
+	// Retourne true si elle existe
+	// Retourne false sinon
+	public function existeMailDiff($idac, $mail){
+		$sql = 'SELECT posteur_email FROM actions_personnes ap, actions_initiatives_personnes aip WHERE ap.id = aip.id_personne AND id_initiative='.$idac.' AND posteur_email ="'.$mail.'"' ;
+		$rs = PdoForcesVives::$monPdo->query($sql);
+		$ligne = $rs->fetch();
+		if(!is_array($ligne)){
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	
+	// Retourne les infos de la personne correspondante à l'adresse mail passée en paramètre
+	public function getPersonneByMail($mail){
+		$sql = 'SELECT * FROM actions_personnes WHERE posteur_email ="'.$mail.'"';
+		$rs = PdoForcesVives::$monPdo->query($sql);
+		$ligne = $rs->fetch();
+		return $ligne;
+	}
+
+	// Insertion en bd de la personne dont les données sont passées en paramètre 
+	// Retourne true si l'insertion s'est réalisée
+	// Retourne false si l'adresse mail existe déjà en bd ou si problème dans l'insertion 
+	/*public function insertPersonne($nom, $prenom, $mail) {
+		if (!is_array(getPersonneByMail($mail)){
+			$sql = 'INSERT INTO actions_personnes (nom, prenom, posteur_email) VALUES ("'.$nom.'","'.$prenom.'","'.$mail.'")';
+			$rs = PdoForcesVives::$monPdo->exec($sql);
+			return $rs;
+		}
+		else {
+			return false;
+		}	
+	}
+
+	// Insertion de l'adresse mail passée en paramètre dans la liste de diffusion de l'action passée en paramètre
+	// Si l'adresse mail n'existe pas déjà dans la base de données, elle y est également ajoutée
+	// Retourne true si l'insertion s'est réalisée
+	// Retourne false si problème dans l'insertion
+	public function insertDiffusion($idac, $mail){
+		if (!getPersonneByMail($mail)){ // test si l'adresse mail existe
+			$ins = insetPersonne($nom, $prenom, $mail);
+
+		}
+
+	}*/
+	
 }
 
 ?>

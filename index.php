@@ -8,7 +8,7 @@ include_once ("vues/menu.php");
   <body class="homecarto">
    <div class="row">
     <nav class="large-4 columns" id="volet">
-    	<h2>Navigation de la Constellation</h2>
+    	<h2>Navigation dans la Constellation</h2>
     	<br/>
     	<p>Cliquez sur les cercles pour naviguer de centre d'intérêt en centre d'intérêt, de rubrique en rubrique, et afficher la fiche de l'action que vous souhaitez consulter.</p> 
     	<p>Lorsque les coordonnées de l'initiateur d'une action sont disponibles, un formulaire vous permet de le contacter via la fiche détail de l'action.</p>
@@ -300,6 +300,7 @@ include_once ("vues/menu.php");
         }
 
         function zoomTo(v) {
+          //alert(v[2]);
           var k = diameter / v[2];
           view = v;
           node.attr("transform", function (d) {
