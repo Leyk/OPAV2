@@ -1,4 +1,5 @@
-<?php include_once("inc/fonctions_globales.php");
+<?php 
+require_once ("inc/_var_fv.php");
 include_once ("vues/entete.php"); ?>
   <body>
     <div id="erreur">
@@ -45,7 +46,7 @@ include_once ("vues/entete.php"); ?>
     else {
        $existMailInitiateur = false;
     }
-    if (mailListeDiff($id)){
+    if ($pdo->getListeDiffusion($id)){
       $existeMailDiff = true;
     }
     else {
@@ -87,16 +88,16 @@ include_once ("vues/entete.php"); ?>
           if(!$existe_mail_initiateur){
             $erreur.css('display','block');
             $erreur.html("<p>Il n'y a malheureusement aucune adresse mail valide pour cet initiateur ! </p>");
-            $('#formcontact-contenu').slideUp(); /* ferme le corps du formulaire */
+            $('#formcontact-contenu').slideUp(); // ferme le corps du formulaire 
           } 
           else {
-            $('html, body').animate({ /* ajuste l'écran principal sur l'ouverture du formulaire */
+            $('html, body').animate({ // ajuste l'écran principal sur l'ouverture du formulaire 
               scrollTop: $("#formcontact").offset().top
             }, 1000);
-            $('#volet').animate({ /* ajuste l'écran de navigation (volet) sur l'ouverture du formulaire */
+            $('#volet').animate({ // ajuste l'écran de navigation (volet) sur l'ouverture du formulaire 
              scrollTop: $("#formcontact").offset().top
             }, 1000);
-            $('#formcontact-contenu').slideDown(); /* ouvre le corps du formulaire */
+            $('#formcontact-contenu').slideDown(); // ouvre le corps du formulaire 
           }
         }
         else if($(this).val() === "diffusion") {
@@ -109,21 +110,20 @@ include_once ("vues/entete.php"); ?>
           else { // s'il y a des mails de contact dans la liste de diffusion
             $info.css('display','block');
             $info.html("En remplissant ce formulaire, votre adresse mail sera conservée et ajoutée à la liste de diffusion de cette action afin que vous puissiez être contacté par d'autres personnes intéressées par cette action à l'avenir.");
-            //$info.css('font-size','0.7rem');
-            $('#formcontact-contenu').slideDown(); /* ouvre le corps du formulaire */
-            $('html, body').animate({ /* ajuste l'écran principal sur l'ouverture du formulaire */
+            $('#formcontact-contenu').slideDown(); // ouvre le corps du formulaire 
+            $('html, body').animate({ // ajuste l'écran principal sur l'ouverture du formulaire 
               scrollTop: $("#formcontact").offset().top
             }, 1000);
-            $('#volet').animate({ /* ajuste l'écran de navigation (volet) sur l'ouverture du formulaire */
+            $('#volet').animate({ // ajuste l'écran de navigation (volet) sur l'ouverture du formulaire 
              scrollTop: $("#formcontact").offset().top
             }, 1000);
           }
         }
         else{
           if ($(this).val()==="")
-              $('#formcontact-contenu').slideUp(); /* ferme le corps du formulaire */
+              $('#formcontact-contenu').slideUp(); // ferme le corps du formulaire 
             else
-              $('#formcontact-contenu').slideDown(); /* ouvre le corps du formulaire */
+              $('#formcontact-contenu').slideDown(); // ouvre le corps du formulaire 
         }
       });
 
@@ -169,8 +169,9 @@ include_once ("vues/entete.php"); ?>
 	         );
         }
       });
-
-      function verifier(champ){  // vérification remplissage des champs
+  
+      // Fonction qui vérifie si tous les champs obligatoires ont été remplis. Affiche un message d'erreur si ce n'est pas le cas
+      function verifier(champ){  
         var bool = true;
         if(champ.val() == ""){
           $erreur.html("<p>Les champs avec * sont obligatoires.</p>");
@@ -183,6 +184,7 @@ include_once ("vues/entete.php"); ?>
         return bool;
       }
 
+      // Fonction qui vérifie si une adresse email est valide. Si elle ne l'est pas, affiche un message d'erreur si elle ne l'est pas
       function validateEmail(email) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         var bool = re.test(email.val());

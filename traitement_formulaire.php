@@ -42,18 +42,14 @@ if(!isset($erreur)){
 		else {
 			echo "Erreur : l'identifiant projet n'est pas valide";
 		}
-
 	}
-	else if ($destinataire == "diffusion"){ // Cas où l'on souhaite contacter toutes les personnes intéressées par ce projet
+	else if ($destinataire == "diffusion"){ // Cas où l'on souhaite contacter toutes les personnes interessées par ce projet
 		// récup des adresses auxquelles envoyer le mail
-		$sql = "SELECT posteur_email FROM actions_personnes ap, actions_initiatives_personnes aip WHERE ap.id = aip.id_personne AND id_initiative=".$idproj ;
-		$rs = $connexion->prepare($sql);
-		$rs->execute() or die ("Erreur : ".__LINE__." : ".$sql);
-		$nb_lignes = $rs->rowCount();
+		$lesMails = $pdo->getListeDiffusion($idproj);
 		$succ = false; // déterminera si au moins un mail a pu être envoyé
 		$resultat = '';
-		if($nb_lignes){
-			while ($r = $rs->fetch(PDO::FETCH_ASSOC)){  // parcours de l'ensemble des adresses mails dispo dans la "liste de diffusion"
+		if(is_array($lesMails)){
+			foreach ($lesMails as $r){  // parcours de l'ensemble des adresses mails dispo dans la "liste de diffusion"
 			 	$mail = $r['posteur_email'];
 
 			 	// Vérification validité des adresses mail récupérées
@@ -64,7 +60,6 @@ if(!isset($erreur)){
 					if(true){  // mail est envoyé
 						$succ = true;
 						$resultat = "Success";
-
 					} 
 					else{  // erreur dans l'envoi du mail
 						$resultat = "Echec envoi";

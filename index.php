@@ -1,8 +1,6 @@
 <?php
 
-/*require_once ("include/fonctions.php");
-require_once ("include/class.pdoluxcar.php");
-$pdo = PdoLxc::getPdoLxc();*/
+require_once ("inc/_var_fv.php");
 include_once ("vues/entete.php");
 include_once ("vues/menu.php");
 
