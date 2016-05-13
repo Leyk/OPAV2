@@ -72,8 +72,17 @@ if(!isset($erreur)){
 		$lesMails = $pdo->getListeDiffusion($idproj);
 		$succ = false; // déterminera si au moins un mail a pu être envoyé
 		$resultat = '';
-		if(!$pdo->existeMailDiff($idproj, $posteur_email)){
-			// Insertion en bd de l'adresse mail
+		if(!$pdo->existeMailDiff($idproj, $posteur_email)){ // Cas où l'adresse mail n'existe pas encore dans la liste de diffusion pour le projet choisi
+			$idpers = $pdo->getPersonneByMail($posteur_email); // on tente de vérifier si l'adresse mail existe déjà en bd
+			if (is_array($pers)){
+				$insertDiff = $pdo->insertDiffusion(); // si elle existe, on ajoute juste une liaison entre le projet et l'adresse mail
+			}
+			else { // si l'adresse mail n'existe pas encore en bd on l'ajoute
+				$insertPers = $pdo->insertPersonne();
+				if($insertPersonne){
+					
+				}
+			}
 		}
 		if(is_array($lesMails)){
 			foreach ($lesMails as $r){  // parcours de l'ensemble des adresses mails dispo dans la "liste de diffusion"
