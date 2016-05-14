@@ -68,6 +68,14 @@ class PdoForcesVives{
 		return $ligne;
 	}	
 
+	// Retourne l'ensemble des adresses mails (la liste de diffusion) liées à l'action passée en paramètre SAUF l'adresse mail passée en paramètre
+	public function getListeDiffusionRestrict($idac, $mail){
+		$sql = 'SELECT posteur_email FROM actions_personnes ap, actions_initiatives_personnes aip WHERE ap.id = aip.id_personne AND id_initiative='.$idac.' AND posteur_email !="'.$mail.'"' ;
+		$rs = PdoForcesVives::$monPdo->query($sql);
+		$ligne = $rs->fetchAll(PDO::FETCH_ASSOC);
+		return $ligne;
+	}
+
 	// Vérifie si l'adresse mail passée en paramètre existe dans la liste de diffusion de l'action passée en paramètre
 	// Retourne true si elle existe
 	// Retourne false sinon
@@ -95,16 +103,6 @@ class PdoForcesVives{
 	// Insertion en bd de la personne dont les données sont passées en paramètre 
 	// Retourne true si l'insertion s'est réalisée
 	// Retourne false si l'adresse mail existe déjà en bd ou si problème dans l'insertion 
-	/*public function insertPersonne($nom, $prenom, $mail) {
-		if (!is_array(getPersonneByMail($mail)){
-			$sql = 'INSERT INTO actions_personnes (nom, prenom, posteur_email) VALUES ("'.$nom.'","'.$prenom.'","'.$mail.'")';
-			$rs = PdoForcesVives::$monPdo->exec($sql);
-			return $rs;
-		}
-		else {
-			return false;
-		}	
-	}*/
 	public function insertPersonne($nom, $prenom, $mail) {
 			$sql = 'INSERT INTO actions_personnes (nom, prenom, posteur_email) VALUES ("'.$nom.'","'.$prenom.'","'.$mail.'")';
 			$rs = PdoForcesVives::$monPdo->exec($sql);
@@ -112,29 +110,8 @@ class PdoForcesVives{
 	}
 
 	// Insertion de l'adresse mail passée en paramètre dans la liste de diffusion de l'action passée en paramètre
-	// Si l'adresse mail n'existe pas déjà dans la base de données, elle y est également ajoutée
 	// Retourne true si l'insertion s'est réalisée
 	// Retourne false si problème dans l'insertion
-	/*public function insertDiffusion($idac, $nom, $prenom, $mail){
-		if (!getPersonneByMail($mail)){ // test : l'adresse mail n'existe pas en bd
-			$ins = insertPersonne($nom, $prenom, $mail);
-			if($ins){ // insertion ok
-				$idpers = getPersonneByMail($mail);
-				$sql = 'INSERT INTO actions_initiatives_personnes (id_initiative, id_personne) VALUES ('.$idac.','.$idpers.')';
-				$rs = PdoForcesVives::$monPdo->exec($sql);
-				return $rs;
-			}
-			else { // insertion échouée
-				return false;
-			}
-		}
-		else { // l'adresse mail existe déjà en bd, on ne fait donc que le lien entre celle-ci et l'action
-			$idpers = getPersonneByMail($mail);
-			$sql = 'INSERT INTO actions_initiatives_personnes (id_initiative, id_personne) VALUES ('.$idac.','.$idpers.')';
-			$rs = PdoForcesVives::$monPdo->exec($sql);
-			return $rs;
-		}
-	}*/
 	public function insertDiffusion($idac, $idpers){
 		$sql = 'INSERT INTO actions_initiatives_personnes (id_initiative, id_personne) VALUES ('.$idac.','.$idpers.')';
 		$rs = PdoForcesVives::$monPdo->exec($sql);

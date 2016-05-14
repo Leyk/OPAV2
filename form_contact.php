@@ -108,7 +108,7 @@ include_once ("vues/entete.php"); ?>
           if(!$existe_mail_diff){ // s'il n'y a pas de mails dans la liste de diffusion
             $erreur.css('display','block');
             $erreur.html("<p>Il n'y a malheureusement aucune adresse mail valide dans la liste de diffusion de ce projet ! </br> Vous pouvez cependant entrer votre adresse mail afin de pouvoir être contacté par d'autres personnes intéressées par cette action à l'avenir.</p> ");
-			$('#posteur_message').css("display","none"); // ouvre le corps du "sous formulaire"           
+			      $('#posteur_message').css("display","none"); // ouvre le corps du "sous formulaire"           
             $('#formcontact-contenu').slideDown(); // ouvre le corps du formulaire principal
             $('html, body').animate({ // ajuste l'écran principal sur l'ouverture du formulaire 
               scrollTop: $("#formcontact").offset().top
@@ -132,7 +132,7 @@ include_once ("vues/entete.php"); ?>
         else{
           if ($(this).val()==="")
               $('#formcontact-contenu').slideUp(); // ferme le corps du formulaire 
-            else
+          else
               $('#formcontact-contenu').slideDown(); // ouvre le corps du formulaire 
         }
       });
@@ -156,23 +156,24 @@ include_once ("vues/entete.php"); ?>
         var nom = verifier($nom_personne);
         var mail = verifier($mail_personne);
         var mailok = validateEmail($mail_personne);
-        var msg = verifier($msg_personne);
+        var msg = "";
         var dest = $('#dest_msg option:selected').val();
-        var dataOk = false;
-        
+        var dataOk = false; 
         // ===== Vérification du remplissage des champs obligatoires, selon la sélection du destinataire ====
         if (dest === "initiateur"){
+          msg = verifier($msg_personne);
         	if(nom && mail && msg && mailok){
         		dataOk = true;
         	}
         }
         else if (dest === "diffusion"){
-        	if(!$existe_mail_diff){
-        		if(nom && mail && mailOk){
+        	if(!$existe_mail_diff){ 
+        		if(nom && mail && mailok){
         			dataOk = true;
         		}
         	}
         	else {
+            msg = verifier($msg_personne);
         		if(nom && mail && msg && mailok){
         			dataOk = true;
         		}
@@ -191,16 +192,16 @@ include_once ("vues/entete.php"); ?>
 	          	destinataire : $dest
 	          },
 	          function(data){ // fonction qui va gérer le retour
-	          	if(data == "Success"){
-	          		$resultat.html("<p>Votre message a été envoyé avec succès ! </p>");
-	          		$resultat.css('display','block');
-	          	}
-	          	else{
-	          		$erreur.html("<p>"+data+"</p>");
+              if (data.Success){
+                $resultat.html("<p>"+data.Success+"</p>");
+                $resultat.css('display','block');
+              }
+	          	if (data.Erreur){
+	          		$erreur.html("<p>"+data.Erreur+"</p>");
 	          		$erreur.css('display','block');
 	          	}
 	          },
-	          'text' // Format des données reçues : pour recevoir "Success" ou "Failed"
+	          'json' // Format des données reçues 
 	         );
         }
       });
