@@ -1,7 +1,5 @@
 <?php
 
-// require_once "inc/_var_fv.php";
-
 /** Affiche la liste des actions
 ------------------------------------------------------------------------ 
  *  Entrée : string $statut : Statut des actions à ramener
@@ -11,30 +9,17 @@
  */
 function afficheActions($statut="",$limit=1)
 {
-  global $connexion;
-
+  global $pdo;
   $statut = explode("+", $statut);
   $where_statut = "( initiative_statut = '".$statut[0]."'";
-  for($i=1;$i<count($where_statut);$i++)
-  {
+  for($i=1;$i<count($where_statut);$i++) {
     $where_statut .= " OR initiative_statut = '".$statut[$i]."'";
   }
   $where_statut .= ")";
-
-  $sql = "SELECT * 
-            FROM actions_initiatives 
-            WHERE afficher > 0 
-              AND initiative_titre != '' 
-              AND ".$where_statut."
-            ORDER BY dateheure_ajout DESC
-            LIMIT 0,".$limit;
-  $rs = $connexion->prepare($sql);
-
-  $rs->execute() or die ("Erreur : ".__LINE__." : ".$sql);
-  $nb_actions = $rs->rowCount();
-  if ($nb_actions) {
+  $les_actions = $pdo->affichageActions($where_statut, $limit);
+  if (is_array($les_actions)) {
     $ret = "<ul>";
-    while ($r = $rs->fetch(PDO::FETCH_ASSOC))
+    foreach ($les_actions as $r)
     {
       $ret .= "
       <li><a href='fiche_action.php?id=".$r["id"]."' data-reveal-id='lghtbox' data-reveal-ajax='true'>
@@ -57,16 +42,9 @@ function afficheActions($statut="",$limit=1)
  */
 function affiche_rubriques($selected="",$typeliste="ul",$description="")
 { 
-  global $connexion;
-
-  $sql = "SELECT * 
-            FROM actions_rubriques 
-            WHERE titre != ''
-            ORDER BY id_centreinteret DESC, titre ASC";
-  $rs = $connexion->prepare($sql);
-  $rs->execute() or die ("Erreur : ".__LINE__." : ".$sql);
-  $nb_actions = $rs->rowCount();
-  if ($nb_actions) {
+  global $pdo;
+  $les_rubriques = $pdo->affichageRubriques();
+  if (is_array($les_rubriques)) {
     if(!isset($aff)){
       $aff = "";
     }
@@ -78,7 +56,7 @@ function affiche_rubriques($selected="",$typeliste="ul",$description="")
     }
     elseif ($typeliste == 'ul') $aff .= "<ul id='liste_rubriques'>";
 
-    while ($r = $rs->fetch(PDO::FETCH_ASSOC))
+    foreach ($les_rubriques as $r)
     {
       if ($typeliste == 'select')
       {
@@ -90,7 +68,6 @@ function affiche_rubriques($selected="",$typeliste="ul",$description="")
           if ($ancien_id_centreinteret) $aff .= "</optgroup>"; // Pas le premier
           $aff .= "<optgroup label='".nom_centreinteret($r["id_centreinteret"])."'>";
         }
-
         // rubrique sélectionnée ?
         if ($selected == $r["titre"])
           $aff .= "<option selected value='".$r["id"]."'>".$r["titre"]."</option>";
@@ -102,10 +79,8 @@ function affiche_rubriques($selected="",$typeliste="ul",$description="")
 
       $ancien_id_centreinteret = $r["id_centreinteret"];
     }
-
     if ($typeliste == 'select') $aff .= "</optgroup></select>";
     elseif ($typeliste == 'ul') $aff .= "</ul>";
-
   }
 
   return $aff;
@@ -120,22 +95,18 @@ function affiche_rubriques($selected="",$typeliste="ul",$description="")
 function affiche_tree()
 { 
   global $connexion;
+  global $pdo;
 
   // Recup liste des centres d'intérêt
-  $sqlci = "SELECT titre, id
-            FROM actions_centreinteret C
-            WHERE titre != ''";
-  $rsci = $connexion->prepare($sqlci);
-  $rsci->execute() or die ("Erreur : ".__LINE__." : ".$sqlci);
-  $nbci = $rsci->rowCount();
-  if ($nbci) {
+  $les_ci = $pdo->getCentreInteret();
+  if (is_array($les_ci)) {
 
     // Début arbre parent
     $aff = "var root = 
         {
          \"name\": \"forcesvives\",
          \"children\": [";
-    while ($c = $rsci->fetch(PDO::FETCH_ASSOC))
+    foreach ($les_ci as $c)
     {
       // Nouveau centre d'intérêt
       if (isset($aff_ci)) $aff_ci .= ",";
@@ -145,15 +116,9 @@ function affiche_tree()
         \"children\": [";
 
       // Recup liste des rubriques de ce centre d'intérêt
-      $sqlru = "SELECT titre, id
-                FROM actions_rubriques 
-                WHERE titre != ''
-                  AND id_centreinteret = ".$c["id"];
-      $rsru = $connexion->prepare($sqlru);
-      $rsru->execute() or die ("Erreur : ".__LINE__." : ".$sqlru);
-      $nb_rub = $rsru->rowCount();
-      if ($nb_rub) {
-        while ($ru = $rsru->fetch(PDO::FETCH_ASSOC))
+      $les_rub = $pdo->getRubriqueCI($c["id"]);
+      if (is_array($les_rub)) {
+        foreach ($les_rub as $ru)
         {
           // Nouvelle rubrique
           if (isset($aff_ru)) $aff_ru .= ",";
@@ -171,7 +136,6 @@ function affiche_tree()
                         AND L.id_rubrique = ".$ru["id"]."
                         AND I.initiative_titre != ''
                         AND I.id = L.id_initiative";
-            // echo $sqlact;
             $rsact = $connexion->prepare($sqlact);
             $rsact->execute() or die ("Erreur : ".__LINE__." : ".$sqlact);
             $nb_actions = $rsact->rowCount();
@@ -212,23 +176,15 @@ function affiche_tree()
  */
 function nom_centreinteret($id="")
 { 
-  global $connexion;
+  global $pdo;
   $id = intval($id);
-
-  $sqlci = "SELECT titre
-            FROM actions_centreinteret C
-            WHERE id = :idci
-            LIMIT 0,1";
-  $rsci = $connexion->prepare($sqlci);
-  $rsci->execute(array(':idci' => $id)) or die ("Erreur : ".__LINE__." : ".$sqlci);
-  $nbci = $rsci->rowCount();
-  if ($nbci) {
-    while ($c = $rsci->fetch(PDO::FETCH_ASSOC))
+  $les_ci = $pdo->getNomCentreInteret($id);
+  if (is_array($les_ci)) {
+    foreach ($les_ci as $c)
     {
-        $aff = $c["titre"];
+      $aff = $c["titre"];
     }
-  } // nbci
-
+  } 
   return $aff;
 }
 

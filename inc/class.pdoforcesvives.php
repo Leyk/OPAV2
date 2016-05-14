@@ -104,9 +104,9 @@ class PdoForcesVives{
 	// Retourne true si l'insertion s'est réalisée
 	// Retourne false si l'adresse mail existe déjà en bd ou si problème dans l'insertion 
 	public function insertPersonne($nom, $prenom, $mail) {
-			$sql = 'INSERT INTO actions_personnes (nom, prenom, posteur_email) VALUES ("'.$nom.'","'.$prenom.'","'.$mail.'")';
-			$rs = PdoForcesVives::$monPdo->exec($sql);
-			return $rs;
+		$sql = 'INSERT INTO actions_personnes (nom, prenom, posteur_email) VALUES ("'.$nom.'","'.$prenom.'","'.$mail.'")';
+		$rs = PdoForcesVives::$monPdo->exec($sql);
+		return $rs;
 	}
 
 	// Insertion de l'adresse mail passée en paramètre dans la liste de diffusion de l'action passée en paramètre
@@ -118,6 +118,59 @@ class PdoForcesVives{
 		return $rs;
 	}
 	
+	// Affiche la liste des actions
+	// Entrée : string $statut : Statut des actions à ramener
+	//          string $limit  : Nombre d'actions à ramener
+	public function affichageActions($where_statut, $limit){
+		$sql = 'SELECT * FROM actions_initiatives WHERE afficher > 0 AND initiative_titre != "" AND'.$where_statut.' ORDER BY dateheure_ajout DESC LIMIT 0,'.$limit;
+		$rs = PdoForcesVives::$monPdo->query($sql);
+		$ligne = $rs->fetchAll(PDO::FETCH_ASSOC);
+		return $ligne;
+	}
+
+    // Affiche la liste des rubriques
+	public function affichageRubriques(){
+		$sql = 'SELECT * FROM actions_rubriques WHERE titre != "" ORDER BY id_centreinteret DESC, titre ASC';
+		$rs = PdoForcesVives::$monPdo->query($sql);
+		$ligne = $rs->fetchAll(PDO::FETCH_ASSOC);
+		return $ligne;
+
+	}
+
+	// Retourne le nom du centre d'intérêt dont l'id est passé en paramètre
+	public function getNomCentreInteret($id){
+		$sql = 'SELECT titre FROM actions_centreinteret C WHERE id ='.$id.' LIMIT 0,1';
+		$rs = PdoForcesVives::$monPdo->query($sql);
+		$ligne = $rs->fetchAll(PDO::FETCH_ASSOC);
+		return $ligne;
+	}
+
+	// Retourne tous les centres d'intérêt
+	public function getCentreInteret(){
+		$sql = 'SELECT titre, id FROM actions_centreinteret C WHERE titre != ""';
+		$rs = PdoForcesVives::$monPdo->query($sql);
+		$ligne = $rs->fetchAll(PDO::FETCH_ASSOC);
+		return $ligne;
+	}
+
+	// Retourne la liste des rubriques pour le centre d'intérêt dont l'id est passé en paramètre
+	public function getRubriqueCI($id){
+		$sql = 'SELECT titre, id FROM actions_rubriques WHERE titre != "" AND id_centreinteret = '.$id;
+		$rs = PdoForcesVives::$monPdo->query($sql);
+		$ligne = $rs->fetchAll(PDO::FETCH_ASSOC);
+		return $ligne;
+	}
+
+	// Retourne la liste des action pour la rubrique dont l'id est passé en paramètre
+	public function getActionRub($id){
+		$sql = 'SELECT initiative_titre,id FROM actions_initiatives I, actions_initiatives_rubriques L WHERE I.afficher > 0 AND L.id_rubrique = '.$id.' AND I.initiative_titre != "" AND I.id = L.id_initiative';
+        $rs = PdoForcesVives::$monPdo->query($sql);
+		$ligne = $rs->fetchAll(PDO::FETCH_ASSOC);
+		return $ligne;
+	}
+ 
+
+
 }
 
 ?>
