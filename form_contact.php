@@ -137,6 +137,7 @@ include_once ("vues/entete.php"); ?>
         }
       });
 
+      // Lors de la saisie
       $champ.keyup(function(){
         $(this).css({
           borderColor:'#CCCCCC'
@@ -151,7 +152,7 @@ include_once ("vues/entete.php"); ?>
         $info.css('display','none');
         var champ = $('.champ');
         champ.css({
-            borderColor:'grey'
+            borderColor:'#cccccc'
         });
         var nom = verifier($nom_personne);
         var mail = verifier($mail_personne);

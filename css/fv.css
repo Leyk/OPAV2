@@ -416,6 +416,10 @@ p{
   text-align: justify;
 }
 
+fieldset{
+  border: 1px solid #C6C7C7;
+}
+
 #volet {
   background: white;
   margin-left: 0;
@@ -426,12 +430,12 @@ p{
   max-width: 100%;
 }
 
-#erreur {
+#erreur, #erreur_donnees {
   display: none;
   color:red;
 }
 
-#resultat{
+#resultat, #resultat_donnees {
   display: none;
   color: green;
 }
@@ -441,6 +445,18 @@ p{
   font-size: 0.7rem;
   color: black;
   text-align: justify;
+}
+
+#btn_plus, #btn_moins{
+  width: 30px;
+}
+
+#btn_plus {
+  background-color: #A3D89D;
+}
+
+#btn_moins{
+  background-color: #FEA3A3;
 }
 
 div.myTooltip {
