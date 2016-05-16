@@ -2,12 +2,12 @@
 
 function display_tree()
 { 
-  global $connexion;
+  global $ma_connexion;
 
   // Recup liste de la sphère de niveau 1
-  $sqlci = "SELECT titre, id
-            FROM actions_centreinteret C
-            WHERE titre != ''";
+  $sqlci = "SELECT ".$titre_sphere_1.",".$id_sphere_1."
+            FROM ".$nom_sphere_1."
+            WHERE ".$titre_sphere_1." != ''";
   $rsci = $connexion->prepare($sqlci);
   $rsci->execute() or die ("Erreur : ".__LINE__." : ".$sqlci);
   $nbci = $rsci->rowCount();
@@ -16,7 +16,7 @@ function display_tree()
     // Début arbre parent
     $aff = "var root = 
         {
-         \"name\": \"forcesvives\",
+         \"name\": ".$nom_root.",
          \"children\": [";
     while ($c = $rsci->fetch(PDO::FETCH_ASSOC))
     {
@@ -24,14 +24,14 @@ function display_tree()
       if (isset($aff_ci)) $aff_ci .= ",";
       if(!isset($aff_ci)) $aff_ci = "";
       $aff_ci .= "\n{
-        \"name\": \"".$c["titre"]."\",
+        \"name\": \"".$c[$titre_sphere_1]."\",
         \"children\": [";
 
-      // Recup liste des rubriques de ce centre d'intérêt
-      $sqlru = "SELECT titre, id
-                FROM actions_rubriques 
-                WHERE titre != ''
-                  AND id_centreinteret = ".$c["id"];
+      // Recup liste des infos sphère niveau 2 de la sphère 1
+      $sqlru = "SELECT ".$titre_sphere_2.",".$id_sphere_2."
+                FROM ".$nom_sphere_2."
+                WHERE ".$titre_sphere_2." != ''
+                AND ".$id_relation_2." = ".$c[$id_sphere_1];  
       $rsru = $connexion->prepare($sqlru);
       $rsru->execute() or die ("Erreur : ".__LINE__." : ".$sqlru);
       $nb_rub = $rsru->rowCount();
@@ -42,18 +42,18 @@ function display_tree()
           if (isset($aff_ru)) $aff_ru .= ",";
           if(!isset($aff_ru)) $aff_ru = "";
           $aff_ru .= "\n{
-            \"name\": \"".$ru["titre"]."\",
+            \"name\": \"".$ru[$titre_sphere_2]."\",
             \"children\": [";
 
             // Recup liste des actions de cette rub
 
-            $sqlact = "SELECT initiative_titre,id
-                      FROM  actions_initiatives I,
-                            actions_initiatives_rubriques L
+            $sqlact = "SELECT ".$titre_sphere_3.",".$id_sphere_3."
+                      FROM  ".$nom_sphere_3." I,
+                            ".$nom_relation_3." L
                       WHERE I.afficher > 0 
-                        AND L.id_rubrique = ".$ru["id"]."
-                        AND I.initiative_titre != ''
-                        AND I.id = L.id_initiative";
+                        AND L.".$id1_relation_3." = ".$ru[$id_sphere_2]."
+                        AND I.".$titre_sphere_3." != ''
+                        AND I.".$id_sphere_3." = L.".$id2_relation_3;
             // echo $sqlact;
             $rsact = $connexion->prepare($sqlact);
             $rsact->execute() or die ("Erreur : ".__LINE__." : ".$sqlact);
@@ -64,11 +64,11 @@ function display_tree()
                 // Nouvelle action
                 if (isset($aff_ac)) $aff_ac .= ",";
                 if(!isset($aff_ac)) $aff_ac = "";
-                $size = strlen($ra["initiative_titre"])*strlen($ra["initiative_titre"]); // à remplacer par importance du projet (échelle de 1 à 5 par ex)
+                $size = strlen($ra[$titre_sphere_3])*strlen($ra[$titre_sphere_3]); // à remplacer par importance du projet (échelle de 1 à 5 par ex)
                 $aff_ac .= "\n{
-                  \"name\": \"".$ra["initiative_titre"]."\",
+                  \"name\": \"".$ra[$titre_sphere_3]."\",
                   \"size\": ". $size.",
-                  \"url\": \"fiche_action.php?id=".$ra["id"]."\"}";
+                  \"url\": \"fiche_action.php?id=".$ra[$id_sphere_3]."\"}";
               }
               $aff_ru .= $aff_ac;
               unset($aff_ac);
@@ -86,6 +86,7 @@ function display_tree()
 
   return $aff;
 }
+
 
 
 ?>

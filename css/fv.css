@@ -430,12 +430,12 @@ fieldset{
   max-width: 100%;
 }
 
-#erreur, #erreur_donnees {
+#erreur, #erreur_donnees, #erreur_csv {
   display: none;
   color:red;
 }
 
-#resultat, #resultat_donnees {
+#resultat, #resultat_donnees, #resultat_csv {
   display: none;
   color: green;
 }

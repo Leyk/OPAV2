@@ -1,67 +1,3 @@
-<?php
-
-require_once ("inc/_var_fv.php");
-include_once ("vues/entete.php");
-include_once ("vues/menu.php");
-
-?>
-  <body class="homecarto">
-   <div class="row">
-    <nav class="large-4 columns" id="volet">
-    	<h2>Navigation dans la Constellation</h2>
-    	<br/>
-    	<p>Cliquez sur les cercles pour naviguer de centre d'intérêt en centre d'intérêt, de rubrique en rubrique, et afficher la fiche de l'action que vous souhaitez consulter.</p> 
-    	<p>Lorsque les coordonnées de l'initiateur d'une action sont disponibles, un formulaire vous permet de le contacter via la fiche détail de l'action.</p>
-    	<p>De même, si vous souhaitez contacter ou être contacté par les forces vives d'une action, remplissez le formulaire via sa fiche.</p>
-     <div id="interac">
-        <ul id="interactions" class="hide">
-          <li class="ajout">Ajouter une action<span class="fi-align-left"></span></li>
-          <li class="ajout">Ajouter une rubrique<span class="fi-align-left"></span></li>
-          <li class="ajout">Ajouter du contenu dans cette action<span class="fi-align-left"></span></li>
-          <li class="moderateur">Je suis modérateur de cette action<span class="fi-lock"></span></li>
-          <li class="moderateur">Je suis modérateur de cette rubrique<span class="fi-lock"></span></li>
-          <li class="contact">Contacter les forces vives de cette action<span class="fi-mail"></span></li>
-          <li class="contact">Contacter les forces vives de cette plateforme<span class="fi-mail"></span></li>
-          <li class="forcevive">Je suis force vive de cette action<span class="fi-male-female"></span></li>
-          <li class="forcevive">Je suis force vive de cette rubrique<span class="fi-male-female"></span></li>
-          <li class="forcevive">Je suis force vive de cette plateforme<span class="fi-male-female"></span></li>
-          <li class="finance">J'ai besoin de financement pour cette action<span class="fi-euro"></span></li>
-          <li class="finance">J'ai besoin de financement pour cette rubrique<span class="fi-euro"></span></li>
-          <li class="conseil">J'ai besoin de conseils pour cette action<span class="fi-lightbulb"></span></li>
-          <li class="conseil">J'ai besoin de conseils pour cette rubrique<span class="fi-lightbulb"></span></li>
-          <li class="aide">J'ai besoin d'aide pour cette action<span class="fi-anchor"></span></li>
-          <li class="aide">J'ai besoin d'aide pour cette rubrique<span class="fi-anchor"></span></li>
-          <li class="finance">Je finance cette action<span class="fi-folder"></span></li>
-          <li class="finance">Je finance cette rubrique<span class="fi-folder"></span></li>
-          <li class="finance">J'organise une réunion à distance<span class="fi-folder"></span></li>
-          <li class="finance">J'organise une discussion à distance<span class="fi-folder"></span></li>
-          <li class="moderateur">Je signale un problème<span class="fi-alert"></span></li>
-        </ul>
-        <div id="boutonactions" class="ajout">InterActions<span class="fi-plus"></span></div>
-        </div>
-        </nav>
-        <div id="svgdiv" class = "large-8 columns">
-    	</div>
-    </div>
-    <!-- ======= Imports Scripts pour d3 js =========== -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="js/foundation.min.js"></script>
-    <!-- ======= Imports Scripts pour d3 js =========== -->
-    <script>
-      $(document).foundation();
-
-      $(function() {
-
-        $("#boutonactions").click(function() {
-          $("#interactions").slideToggle();
-        });
-      });      
-    </script>
-    <script>
-
-        <?php echo affiche_tree(); ?>   // Affichage en mode fichier JSON des données 
-
         var margin = 1,
             diameter = 900;   // diamètre minimum du cercle "root"
             if(window.innerWidth >= 1700){  // si grand écran, root plus grand
@@ -141,7 +77,6 @@ include_once ("vues/menu.php");
         // Fonction définissant le click sur un cercle. S'il s'agit d'une feuille, le volet d'information affiche la fiche du projet
         function clickFct(d,i) {  // i = place dans l'arbre Json (0 = forcesvives = root)
           if(d3.select(this).classed("node--leaf")){
-           $('#volet').load(d.url);  // chargement de la fiche projet dans le volet
             if (focus !== d){  // si on n'est pas centré sur le focus, on zoom dessus 
               zoom(d.parent);
               d3.event.stopPropagation();  // fonction qui permet le zoom 
@@ -173,33 +108,6 @@ include_once ("vues/menu.php");
             });
 
 
-        // ================================ Dimensions du volet ===============================================
-        // Fonction qui adapte la taille du volet selon la taille de la fenetre - Responsive
-        function redimensionnement(){
-	    		var result  = $('#volet');
-	    		if("matchMedia" in window) { // Détection
-		    		if(window.matchMedia("(min-width: 1026px)").matches){
-		    			result.css('height',diameter);
-		    		}
-		    		else if(window.matchMedia("(min-width: 992px)").matches){
-		    			result.css('height',400);
-		    		}
-		    		else if(window.matchMedia("(min-width: 768px)").matches){
-		    			result.css('height',300);
-		    		}
-		    		else{
-		    			result.css('height',200);
-		    		}
-	    		}
-    		}
-  			// On lie l'évenement resize à la fonction
-  			window.addEventListener('resize',redimensionnement, false);
-
-  			// Exécution de la fonction au démarrage pour avoir un retour initial
-  			redimensionnement();
-			  // ====================================================================================================
-
-
 			  // ================================ Mise en forme du texte ============================================
         // Fonction qui se charge de gérer l'affichage du texte dans les cercles de façon à ce que celui-ci ne dépasse pas en largeur
         // NB : à améliorer pour prendre en compte la hauteur
@@ -221,7 +129,6 @@ include_once ("vues/menu.php");
 		    		line.push(word);  // ajoute le mot à la ligne
 		    		tspan.text(line.join(" "));  // ajoute la ligne en texte
 		    		//alert(d.name+" "+tspan.node().getBBox().height); // à creuser pour prendre en compte également la hauteur...
-            //alert(rayon*2*k);
 		    		if (tspan.node().getComputedTextLength() >= rayon*2){  // si la taille du texte après ajout d'un mot dépasse le diamètre (r*2) du cercle, on retire le mot et on va à la ligne
 		    			line.pop(); 
 		    			tspan.text(line.join(" ")); 
@@ -301,6 +208,7 @@ include_once ("vues/menu.php");
         }
 
         function zoomTo(v) {
+          //alert(v[2]);
           var k = diameter / v[2];
           view = v;
           node.attr("transform", function (d) {
@@ -311,6 +219,3 @@ include_once ("vues/menu.php");
           });
         }
         d3.select(self.frameElement).style("height", diameter + "px");
-    </script>     
-  </body>
-  <?php include_once("vues/foot.php"); ?>
