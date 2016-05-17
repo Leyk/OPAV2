@@ -84,7 +84,7 @@ if(!isset($erreur)){
     // Début arbre parent
     $aff =
         "{
-         \"name\": ".$nom_root.",
+         \"name\": \"".$nom_root."\",
          \"children\": [";
     while ($c = $rsci->fetch(PDO::FETCH_ASSOC))
     {
@@ -149,7 +149,7 @@ if(!isset($erreur)){
       $aff_ci .= "\n]}";
     }
     $aff .= $aff_ci;
-    $aff .= "\n]};";    // Fin arbre parent
+    $aff .= "\n]}";    // Fin arbre parent
   } // nbci
 echo $aff;
 

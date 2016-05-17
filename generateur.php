@@ -273,14 +273,34 @@ include_once ("vues/menu.php");
 			            		<div id="svgdiv" class = "large-12 columns">
 	    						</div>
 			          		</fieldset>
-	          				<div class="row">
-	            				<div class="large-12 text-center">
-	              					<button type="submit" class="btn" id="valider_constellation">Valider ma constellation</button>          
-	            				</div>
+	          			</div>
+	      	  		</div> <!-- end div constellation -->
+	      	  		<div id="formgene-etape3" class="row hide">
+	            		<div class="large-12 columns">
+			          		<fieldset>
+			            		<legend>Etape 3/3 : Personnalisez votre Constellation !</legend> 
+			            		<span id="erreur_ergo"></span>
+						        <span id="resultat_ergo"></span>
+			            		Couleur des feuilles : <input class="jscolor" value="" id="feuille_couleur">
+			          		</fieldset>
+			          		<div class="row">
+			            		<div class="large-12 text-center">
+			              			<button type="submit" class="btn" id="valider_constellation">Valider et afficher le code</button>          
+			            		</div>
 	          				</div>
 	          			</div>
-	      	  		</div> 
-	          	</div>
+	      	 		</div> 
+	      	 		<div id="formgene-etapefinale" class="row hide">
+	            		<div class="large-12 columns">
+			          		<fieldset>
+			            		<legend>Récupérez votre code !</legend> 
+			            		<span id="erreur_res"></span>
+						        <span id="resultat_res"></span>
+			            		<textarea name="posteur_message" id="posteur_message" placeholder="Le code" class="champ"></textarea>
+			          		</fieldset>
+	          			</div>
+	      	 		</div> 
+	          	</div> 
 	      	</div>         	
   		</form>
      </div>     
@@ -289,6 +309,7 @@ include_once ("vues/menu.php");
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="js/foundation.min.js"></script>
+    <script src="js/jscolor.js"></script>
     <!-- ======= Imports Scripts pour d3 js =========== -->
     <script src="js/vendor/jquery.js"></script>
     <script src="js/foundation.min.js"></script>
@@ -308,6 +329,7 @@ include_once ("vues/menu.php");
       		$test_co = $('#test_connexion'),
       		$valider = $('#valider_donnees'),
       		$bt_plus = $('.add'),
+      		$valid_constel = $('#valider_constellation'),
       		$bt_moins = $('.del'),
       		$bd_hote = $('#bd_hote'),
       		$bd_nom = $('#bd_nom'),
@@ -342,6 +364,11 @@ include_once ("vues/menu.php");
           	$('#formgene-csv').slideDown();
           }
         });
+
+        $('#feuille_couleur').change(function() {
+        	var couleur = this.value;
+
+        })
 
         $btn_radio.change(function(e){
         	var el = e.target||event.srcElement;
@@ -631,9 +658,9 @@ include_once ("vues/menu.php");
            				$resultat_donnees.html("<p> Succès ! </p>");
            				$resultat_donnees.css('display','block');
            				$(valider_donnees).attr("disabled", true);
-           				$('#div_constellation').slideDown();
-           				var root = data;
-           				console.log(root);
+           				$('#div_constellation').slideDown();          				
+           				var root = JSON.parse(data);
+						
            				var margin = 1,
 			            	diameter = 900;   // diamètre minimum du cercle "root"
 			            if(window.innerWidth >= 1700){  // si grand écran, root plus grand
@@ -762,12 +789,21 @@ include_once ("vues/menu.php");
 					          });
 					        }
 					        d3.select(self.frameElement).style("height", diameter + "px");
+					        $('#formgene-etape3').slideDown();
            			},
            			'text' // A CHECK?
            		);
            	}
 
 		});
+
+
+		$valid_constel.click(function(e){
+			e.preventDefault();
+			$(valider_constellation).attr("disabled", true);
+			$('#formgene-etapefinale').slideDown();
+			
+		})
 
 		// Fonction qui vérifie si tous les champs obligatoires ont été remplis. Affiche un message d'erreur si ce n'est pas le cas
 		function verifier(champ, form){  
