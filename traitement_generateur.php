@@ -72,18 +72,18 @@ if(!isset($erreur)){
     
     $ma_connexion = new PDO('mysql:host=127.0.0.1;dbname=bdtestopa','root', '', array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
     
-  // Recup liste de la sphère de niveau 1
-  $sqlci = "SELECT ".$titre_sphere_1.",".$id_sphere_1."
-            FROM ".$nom_sphere_1."
-            WHERE ".$titre_sphere_1." != ''";
-  $rsci = $ma_connexion->prepare($sqlci);
-  $rsci->execute() or die ("Erreur : ".__LINE__." : ".$sqlci);
-  $nbci = $rsci->rowCount();
-  if ($nbci) {
+	// Recup liste de la sphère de niveau 1
+	$sqlci = "SELECT ".$titre_sphere_1.",".$id_sphere_1."
+	            FROM ".$nom_sphere_1."
+	            WHERE ".$titre_sphere_1." != ''";
+    $rsci = $ma_connexion->prepare($sqlci);
+    $rsci->execute() or die ("Erreur : ".__LINE__." : ".$sqlci);
+    $nbci = $rsci->rowCount();
+    if ($nbci) {
 
     // Début arbre parent
-    $aff = "var root = 
-        {
+    $aff =
+        "{
          \"name\": ".$nom_root.",
          \"children\": [";
     while ($c = $rsci->fetch(PDO::FETCH_ASSOC))
