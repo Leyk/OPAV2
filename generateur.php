@@ -296,7 +296,13 @@ include_once ("vues/menu.php");
 			            		<legend>Récupérez votre code !</legend> 
 			            		<span id="erreur_res"></span>
 						        <span id="resultat_res"></span>
-			            		<textarea name="posteur_message" id="posteur_message" placeholder="Le code" class="champ"></textarea>
+						       <!-- index.html : 
+			            		<textarea name="code_constel" id="code_constel" placeholder="Le code svg" class="champ"></textarea>
+			            		data.php : 
+			            		<textarea name="code_data" id="code_data" placeholder="Le code php données" class="champ"></textarea>
+						        d3js.css : 
+			            		<textarea name="code_css" id="code_css" placeholder="Le code CSS" class="champ"></textarea>-->
+			            		<!--<pre> <code class="html xml"> </code> </pre>-->
 			          		</fieldset>
 	          			</div>
 	      	 		</div> 
@@ -570,7 +576,8 @@ include_once ("vues/menu.php");
             var champ = $('.champ');
             champ.css({
             	borderColor:'#cccccc'
-          	});  
+          	}); 
+          	var src = $('#type_bd option:selected').val(); 
           	var b_sphere0 = verifier($('#niv0'), "valider_donnees");
           	var b_sphere1 = verifier($('#niv1'), "valider_donnees");
           	var b_id1 = verifier($('#idniv1'), "valider_donnees");
@@ -627,6 +634,11 @@ include_once ("vues/menu.php");
            			{
            				// ========================= envoi des données récupérées dans tous les champs ===========
            				bouton : "btn_validation",
+           				source : src,
+		                hote : $bd_hote.val(),
+		                bdname : $bd_nom.val(),
+		                bduser : $bd_user.val(),
+		                bdpswd : $bd_pswd.val(),
            				nom_root : $("#niv0").val(),
            				nom_sphere_1 : $('#niv1').val(),
            				id_sphere_1 : $('#idniv1').val(),

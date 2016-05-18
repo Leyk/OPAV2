@@ -87,7 +87,8 @@ header h2 {
 
 body.homecarto {
 
-  text-align: left; }
+  text-align: left;
+ }
 
 
 
@@ -390,14 +391,10 @@ nav {
     text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;  /* ombres (décalage vers la droite, vers le bas, valeur du flou, couleur) */
 }
 
-.node--root {
+.node--root, .node--leaf {
 
   pointer-events: all;
 
-}
-
-.node--leaf {
-  pointer-events: all;
 }
 
 

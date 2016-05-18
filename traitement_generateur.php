@@ -10,7 +10,6 @@ else {
 }
 
 if(!isset($erreur)){
-  if ($bouton == "btn_connexion"){
     // == Récupération des variables transmises par formgene et détection d'éventuelles erreurs (variables obligatoires manquantes) ==
     if (isset($_POST['source']) && isset($_POST['hote']) && isset($_POST['bdname']) && isset($_POST['bduser'])){
       $source = $_POST['source'];
@@ -27,50 +26,50 @@ if(!isset($erreur)){
     else {
       $erreur = true;
     }
+    if($bouton == "btn_validation"){ // VERIFIER LES ISSET
+    	$nom_root = $_POST['nom_root'];  // nom général de l'arbre
+	    $nom_sphere_1 = $_POST['nom_sphere_1'];  // nom de la table 1
+	    $id_sphere_1 = $_POST['id_sphere_1'];  // champ id de la table 1
+	    $titre_sphere_1 = $_POST['titre_sphere_1']; // champ titre de la table 1
+	    $nom_sphere_2 = $_POST['nom_sphere_2']; // nom de la table 2
+	    $id_sphere_2 = $_POST['id_sphere_2']; // champ id de la table 2
+	    $titre_sphere_2 = $_POST['titre_sphere_2']; // champ titre de la table 2
+	    $nom_sphere_3 = $_POST['nom_sphere_3']; // nom de la table 3
+	    $id_sphere_3 = $_POST['id_sphere_3']; // champ id de la table 3
+	    $titre_sphere_3 = $_POST['titre_sphere_3']; // champ titre de la table 3
+	    $nom_sphere_4 = $_POST['nom_sphere_4']; // nom de la table 4
+	    $id_sphere_4 = $_POST['id_sphere_4']; // champ id de la table 4
+	    $titre_sphere_4 = $_POST['titre_sphere_4']; // champ titre de la table 4
+	    $nom_relation_2 = $_POST['nom_relation_2'];  // relation n..n
+	    $id1_relation_2 = $_POST['id1_relation_2']; // relation n..n
+	    $id2_relation_2 = $_POST['id2_relation_2']; // relation n..n
+	    $id_relation_2 = $_POST['id_relation_2'];   // relation 1..n
+	    $nom_relation_3 = $_POST['nom_relation_3']; // relation n..n
+	    $id1_relation_3 = $_POST['id1_relation_3']; // relation n..n
+	    $id2_relation_3 = $_POST['id2_relation_3']; // relation n..n
+	    $id_relation_3 = $_POST['id_relation_3']; // relation 1..n
+	    $nom_relation_4 = $_POST['nom_relation_4']; // relation n..n
+	    $id1_relation_4 = $_POST['id1_relation_4']; // relation n..n
+	    $id2_relation_4 = $_POST['id2_relation_4']; // relation n..n
+	    $id_relation_4 = $_POST['id_relation_4']; // relation 1..n
+	}
+}
+  
 
-    if(!isset($erreur)){
-      try {
-        $ma_connexion = new PDO('mysql:host='.$host.';dbname='.$dbname,$user,$pswd, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
-        echo "Success";
-      }
-      catch(Exception $e){
-        echo 'Erreur : '.$e->getMessage().'<br />';
-        echo 'N° : '.$e->getCode();
-      }
-    }
-  }
-  else if($bouton == "btn_validation") {
-    $nom_root = $_POST['nom_root'];  // nom général de l'arbre
-    $nom_sphere_1 = $_POST['nom_sphere_1'];  // nom de la table 1
-    $id_sphere_1 = $_POST['id_sphere_1'];  // champ id de la table 1
-    $titre_sphere_1 = $_POST['titre_sphere_1']; // champ titre de la table 1
-    $nom_sphere_2 = $_POST['nom_sphere_2']; // nom de la table 2
-    $id_sphere_2 = $_POST['id_sphere_2']; // champ id de la table 2
-    $titre_sphere_2 = $_POST['titre_sphere_2']; // champ titre de la table 2
-    $nom_sphere_3 = $_POST['nom_sphere_3']; // nom de la table 3
-    $id_sphere_3 = $_POST['id_sphere_3']; // champ id de la table 3
-    $titre_sphere_3 = $_POST['titre_sphere_3']; // champ titre de la table 3
-    $nom_sphere_4 = $_POST['nom_sphere_4']; // nom de la table 4
-    $id_sphere_4 = $_POST['id_sphere_4']; // champ id de la table 4
-    $titre_sphere_4 = $_POST['titre_sphere_4']; // champ titre de la table 4
-    $nom_relation_2 = $_POST['nom_relation_2'];  // relation n..n
-    $id1_relation_2 = $_POST['id1_relation_2']; // relation n..n
-    $id2_relation_2 = $_POST['id2_relation_2']; // relation n..n
-    $id_relation_2 = $_POST['id_relation_2'];   // relation 1..n
-    $nom_relation_3 = $_POST['nom_relation_3']; // relation n..n
-    $id1_relation_3 = $_POST['id1_relation_3']; // relation n..n
-    $id2_relation_3 = $_POST['id2_relation_3']; // relation n..n
-    $id_relation_3 = $_POST['id_relation_3']; // relation 1..n
-    $nom_relation_4 = $_POST['nom_relation_4']; // relation n..n
-    $id1_relation_4 = $_POST['id1_relation_4']; // relation n..n
-    $id2_relation_4 = $_POST['id2_relation_4']; // relation n..n
-    $id_relation_4 = $_POST['id_relation_4']; // relation 1..n
+if(!isset($erreur)){
+  	try {
+	    $ma_connexion = new PDO('mysql:host='.$host.';dbname='.$dbname,$user,$pswd, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+	    if($bouton == "btn_connexion"){
+	    	echo "Success";
+	    }
+  	}
+    catch(Exception $e){
+	    echo 'Erreur : '.$e->getMessage().'<br />';
+	    echo 'N° : '.$e->getCode();
+  	}
 
-    //include_once("generateur/data.php");
-    //echo $titre_sphere_1;
-    //global $ma_connexion;
-    
-    $ma_connexion = new PDO('mysql:host=127.0.0.1;dbname=bdtestopa','root', '', array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+    if($bouton == "btn_validation") {
+    //include_once("generateur/data.php"); *Problème*
     
 	// Recup liste de la sphère de niveau 1
 	$sqlci = "SELECT ".$titre_sphere_1.",".$id_sphere_1."
@@ -151,11 +150,8 @@ if(!isset($erreur)){
     $aff .= $aff_ci;
     $aff .= "\n]}";    // Fin arbre parent
   } // nbci
-echo $aff;
+  echo $aff;
 
   }
 }
-
-
-
 ?>
