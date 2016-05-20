@@ -109,6 +109,19 @@ include_once ("vues/menu.php");
 				            	</div>
 				            </div>
 				            <div class="row">
+			            		<div class="large-7 large-offset-2 columns end" id="p_scents2">
+				            	</div>
+				            </div>
+				            <div class="row" id="est_feuille2">
+			            		<div class="large-2 large-offset-2 columns">
+				            		<input type="checkbox" id="chbx_niv2" name="chbx_niv2" class= "type_niv" value="feuille"> Il s'agit d'une feuille
+				            	</div>
+				            	<div class="large-4 columns end hide" id="disp_btn2">
+				            		<input type="button" id="btn_add_champ2" class="add_champ" value="Ajouter un champ">
+				            		<input type="button" id="btn_del_champ2" class="del_champ" value="Supprimer un champ">
+				            	</div>
+				            </div>
+				            <div class="row">
 			            		<div class="large-7 large-offset-2 columns end">
 			            		<label>Type de relation entre sphère niveau 2 et sphère de niveau 1 (cardinalités maximales) :</label>
 				            	</div>
@@ -166,6 +179,19 @@ include_once ("vues/menu.php");
 				            		<input type="text" id="titreniv3" name="titreniv3" placeholder="Champ titre" class="champ" value="initiative_titre">
 				            	</div>
 				            </div>
+			            	<div class="row">
+			            		<div class="large-7 large-offset-2 columns end" id="p_scents3">
+				            	</div>
+				            </div>
+				            <div class="row" id="est_feuille3">
+			            		<div class="large-2 large-offset-2 columns">
+				            		<input type="checkbox" id="chbx_niv3" name="chbx_niv3" class= "type_niv" value="feuille"> Il s'agit d'une feuille
+				            	</div>
+				            	<div class="large-4 columns end hide" id="disp_btn3">
+				            		<input type="button" id="btn_add_champ3" class="add_champ" value="Ajouter un champ">
+				            		<input type="button" id="btn_del_champ3" class="del_champ" value="Supprimer un champ">
+				            	</div>
+				            </div>
 				            <div class="row">
 			            		<div class="large-7 large-offset-2 columns end">
 			            		<label>Type de relation entre sphère niveau 3 et sphère de niveau 2 (cardinalités maximales) :</label>
@@ -221,6 +247,19 @@ include_once ("vues/menu.php");
 					        <div class="row">
 			            		<div class="large-7 large-offset-2 columns end">
 				            		<input type="text" id="titreniv4" name="titreniv4" placeholder="Champ titre" class="champ">
+				            	</div>
+				            </div>
+			            	<div class="row">
+			            		<div class="large-7 large-offset-2 columns end" id="p_scents4">
+				            	</div>
+				            </div>
+				            <div class="row" id="est_feuille4">
+			            		<div class="large-2 large-offset-2 columns">
+				            		<input type="checkbox" id="chbx_niv4" name="chbx_niv4" class= "type_niv" value="feuille"> Il s'agit d'une feuille
+				            	</div>
+				            	<div class="large-4 columns end hide" id="disp_btn4">
+				            		<input type="button" id="btn_add_champ4" class="add_champ" value="Ajouter un champ">
+				            		<input type="button" id="btn_del_champ4" class="del_champ" value="Supprimer un champ">
 				            	</div>
 				            </div>
 				            <div class="row">
@@ -342,7 +381,10 @@ include_once ("vues/menu.php");
       		$bd_user = $('#bd_user'),
       		$champ = $('.champ'),
       		$btn_radio = $('.type_rel'),
+      		$chk_box = $('.type_niv'),
       		$btn_csv = $('#valide_csv'),
+      		$btn_add_champ = $('.add_champ'),
+      		$btn_del_champ = $('.del_champ'),
       		$bd_pswd = $('#bd_pswd');
 
         $('header .logo').animate({ letterSpacing: '10px' }, 500);
@@ -376,6 +418,45 @@ include_once ("vues/menu.php");
 
         })
 
+        $btn_add_champ.click(function(e){
+        	var el = e.target||event.srcElement;
+      		var id = el.id;
+      		if(id=="btn_add_champ2"){
+      			var scntDiv = $('#p_scents2');
+      			var i = $('#p_scents2 p').size() + 1;
+      			$('<p><label for="p_scnts"><input type="text" id="p_scnt2_'+i+'" size="20" name="p_scnt_' + i +'" value="" placeholder="Champ supplémentaire" /></label></p>').appendTo(scntDiv);
+      		}
+      		else if(id=="btn_add_champ3"){
+      			var scntDiv = $('#p_scents3');
+      			var i = $('#p_scents3 p').size() + 1;
+      			$('<p><label for="p_scnts"><input type="text" id="p_scnt3_'+i+'" size="20" name="p_scnt_' + i +'" value="" placeholder="Champ supplémentaire" /></label></p>').appendTo(scntDiv);
+      		}
+      		else if(id=="btn_add_champ4"){
+      			var scntDiv = $('#p_scents4');
+      			var i = $('#p_scents4 p').size() + 1;
+      			$('<p><label for="p_scnts"><input type="text" id="p_scnt4_'+i+'" size="20" name="p_scnt_' + i +'" value="" placeholder="Champ supplémentaire" /></label></p>').appendTo(scntDiv);
+      		}
+
+        })
+
+        $btn_del_champ.click(function(e){
+        	var el = e.target||event.srcElement;
+      		var id = el.id;
+      		if(id=="btn_del_champ2"){
+      			var i = $('#p_scents2 p').size();
+      			$('#p_scnt2_'+i).parents('p').remove();
+
+      		}
+      		else if(id=="btn_del_champ3"){
+      			var i = $('#p_scents3 p').size();
+      			$('#p_scnt3_'+i).parents('p').remove();
+      		}
+      		else if(id=="btn_del_champ4"){
+      			var i = $('#p_scents4 p').size();
+				$('#p_scnt4_'+i).parents('p').remove();      			
+      		}
+        })
+
         $btn_radio.change(function(e){
         	var el = e.target||event.srcElement;
       		var id = el.id;
@@ -404,6 +485,59 @@ include_once ("vues/menu.php");
       			$('#formniv4_plusieurs').slideDown();
       		}
         })
+
+        $chk_box.change(function(e){
+        	var el = e.target||event.srcElement;
+      		var id = el.id;
+      		if(id=="chbx_niv2"){
+      			if($('#chbx_niv2').is(':checked')){
+      				$('#disp_btn2').slideDown();
+      				$('#btn_plus2').attr("disabled", true);
+      				$('#btn_moins2').attr("disabled", true);
+      			}
+      			else{
+      				$('#disp_btn2').slideUp();
+      				$('#btn_plus2').attr("disabled", false);
+      				$('#btn_moins2').attr("disabled", false);
+      				var s = $('#p_scents2 p').size();
+      				for(var i=0; i<=s; i++){
+      					$('#p_scnt2_'+i).parents('p').remove();
+      				}
+      			}
+      		}
+      		else if(id=="chbx_niv3"){
+      			if($('#chbx_niv3').is(':checked')){
+      				$('#disp_btn3').slideDown();
+      				$('#btn_plus3').attr("disabled", true);
+      				$('#btn_moins3').attr("disabled", true);
+      			}
+      			else{
+      				$('#disp_btn3').slideUp();
+      				$('#btn_plus3').attr("disabled", false);
+      				$('#btn_moins3').attr("disabled", false);
+      				var s = $('#p_scents3 p').size();
+      				for(var i=0; i<=s; i++){
+      					$('#p_scnt3_'+i).parents('p').remove();
+      				}
+      			}
+      		}
+      		else if(id=="chbx_niv4"){
+      			if($('#chbx_niv4').is(':checked')){
+      				$('#disp_btn4').slideDown();
+      				$('#btn_plus4').attr("disabled", true);
+      				$('#btn_moins4').attr("disabled", true);
+      			}
+      			else{
+      				$('#disp_btn4').slideUp();
+      				$('#btn_plus4').attr("disabled", false);
+      				$('#btn_moins4').attr("disabled", false);
+      				var s = $('#p_scents4 p').size();
+      				for(var i=0; i<=s; i++){
+      					$('#p_scnt4_'+i).parents('p').remove();
+      				}
+      			}
+      		} 	
+        })
                
         // Lors de la saisie
         $champ.keyup(function(){
@@ -422,6 +556,7 @@ include_once ("vues/menu.php");
          		}, 1000);
             	$('#formniv2').slideDown();
             	$('#btn_plus1').hide();
+
       		}
       		else if(id =="btn_plus2"){
       			$('html, body').animate({
@@ -430,6 +565,7 @@ include_once ("vues/menu.php");
             	$('#formniv3').slideDown();
             	$('#btn_plus2').hide();
             	$('#btn_moins2').hide();
+            	$('#est_feuille2').slideUp();
       		}
       		else if(id =="btn_plus3"){
       			$('html, body').animate({
@@ -438,6 +574,7 @@ include_once ("vues/menu.php");
             	$('#formniv4').slideDown();
             	$('#btn_plus3').hide();
             	$('#btn_moins3').hide();
+            	$('#est_feuille3').slideUp();
       		}
       		
       	})
@@ -462,6 +599,7 @@ include_once ("vues/menu.php");
             	$('#radioniv2_plusieurs').attr("checked",false);
             	$('#btn_plus1').show();
             	$('#btn_moins1').show();
+            	$('#est_feuille1').slideDown();
       		}
       		else if(id =="btn_moins3"){
       			$('html, body').animate({
@@ -479,6 +617,7 @@ include_once ("vues/menu.php");
             	$('#radioniv3_plusieurs').attr("checked",false);
             	$('#btn_plus2').show();
             	$('#btn_moins2').show();
+            	$('#est_feuille2').slideDown();
       		}
       		else if(id =="btn_moins4"){
       			$('html, body').animate({
@@ -496,6 +635,7 @@ include_once ("vues/menu.php");
             	$('#radioniv4_plusieurs').attr("checked",false);
             	$('#btn_plus3').show();
             	$('#btn_moins3').show();
+            	$('#est_feuille3').slideDown();
       		}	 
       	})
 
@@ -573,6 +713,7 @@ include_once ("vues/menu.php");
           	    b_niv3 = false,
           	    b_niv4 = false,
           	    dataOk = false;
+          	    nb_niv = 1; // contrôle le nombre de niveaux au niveau du JSON
             var champ = $('.champ');
             champ.css({
             	borderColor:'#cccccc'
@@ -587,16 +728,19 @@ include_once ("vues/menu.php");
               	var b_sphere2 = verifier($('#niv2'), "valider_donnees");
 	          	var b_id2 = verifier($('#idniv2'), "valider_donnees");
 	          	var b_titre2 = verifier($('#titreniv2'), "valider_donnees"); 
+	          	nb_niv = 2;
 	          	if($('#formniv3').css('display') != 'none'){
 	          		b_niv3 = true;
 	          		var b_sphere3 = verifier($('#niv3'), "valider_donnees");
 	          		var b_id3 = verifier($('#idniv3'), "valider_donnees");
 	          		var b_titre3 = verifier($('#titreniv3'), "valider_donnees"); 
+	          		nb_niv = 3;
 	          		if($('#formniv4').css('display') != 'none'){
 	          			b_niv4 = true;
 						var b_sphere4 = verifier($('#niv4'), "valider_donnees");
 		          		var b_id4 = verifier($('#idniv4'), "valider_donnees");
-		          		var b_titre4 = verifier($('#titreniv4'), "valider_donnees"); 
+		          		var b_titre4 = verifier($('#titreniv4'), "valider_donnees");
+		          		nb_niv = 4; 
 					}
 	          	}
            	}
@@ -663,7 +807,8 @@ include_once ("vues/menu.php");
 		            	nom_relation_4 : $('#tablerelniv4').val(), // relation n..n
 		            	id1_relation_4 : $('#tableid1relniv4').val(), // relation n..n
 		            	id2_relation_4 : $('#tableid2relniv4').val(), // relation n..n
-		            	id_relation_4 : $('#idrelniv4').val() // relation 1..n
+		            	id_relation_4 : $('#idrelniv4').val(), // relation 1..n
+		            	nombre_niveau : nb_niv
 		            	// =============================================================================================
            			},
            			function(data){
