@@ -43,7 +43,7 @@ include_once ("vues/menu.php");
 	            		<span id="erreur"></span>
 				        <span id="resultat"></span>
 	            		<input type="text" id="bd_hote" name="bd_hote" placeholder="Hôte *" class="champ" value="127.0.0.1">
-			            <input type="text" id="bd_nom" name="bd_nom" placeholder="Nom de la base *" class="champ" value="bdtestopa">
+			            <input type="text" id="bd_nom" name="bd_nom" placeholder="Nom de la base *" class="champ" value="bdtest2niv">
 			            <input type="text" id="bd_user" name="bd_user" placeholder="Nom d'utilisateur *" class="champ" value="root">
 			            <input type="text" id="bd_pswd" name="bd_pswd" placeholder="Mot de passe " class="champ">
 	          		</fieldset>
@@ -71,7 +71,7 @@ include_once ("vues/menu.php");
 			                </center>
 			              </div>
 			              <div class="small-9 large-11 columns">
-			                <input type="text" id="niv1" name="niv1" placeholder="Nom sphère de niveau 1" class="champ" value="sphere_niveau1">
+			                <input type="text" id="niv1" name="niv1" placeholder="Nom sphère de niveau 1" class="champ" value="actions_centreinteret">
 			              </div>
 			            </div>
 			            <div class="row">
@@ -95,7 +95,7 @@ include_once ("vues/menu.php");
 				                </center>
 				              </div>
 				              <div class="small-9 large-11 columns">
-				                <input type="text" id="niv2" name="niv2" placeholder="Nom sphère de niveau 2" class="champ" value="actions_rubriques">
+				                <input type="text" id="niv2" name="niv2" placeholder="Nom sphère de niveau 2" class="champ" value="actions_initiatives">
 				              </div>
 				            </div>
 				            <div class="row">
@@ -105,7 +105,7 @@ include_once ("vues/menu.php");
 					        </div>
 					        <div class="row">
 			            		<div class="large-7 large-offset-2 columns end">
-				            		<input type="text" id="titreniv2" name="titreniv2" placeholder="Champ titre" class="champ" value="titre">
+				            		<input type="text" id="titreniv2" name="titreniv2" placeholder="Champ titre" class="champ" value="initiative_titre">
 				            	</div>
 				            </div>
 				            <div class="row">
@@ -817,6 +817,7 @@ include_once ("vues/menu.php");
            				$(valider_donnees).attr("disabled", true);
            				$('#div_constellation').slideDown();          				
            				var root = JSON.parse(data);
+           				console.log(data);
 						
            				var margin = 1,
 			            	diameter = 900;   // diamètre minimum du cercle "root"
@@ -832,7 +833,7 @@ include_once ("vues/menu.php");
 				            .padding(7)   // espacement entre les cercles 
 				            .size([diameter - margin, diameter - margin]) // taille cercle root dans son conteneur
 				            .value(function (d) {
-				            return d.size; // taille des feuilles 
+				            return 100//d.size; // taille des feuilles 
 				        });
 
 

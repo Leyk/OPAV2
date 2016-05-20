@@ -192,38 +192,8 @@ if(!isset($erreur)){
 	          if (isset($aff_ru)) $aff_ru .= ",";
 	          if(!isset($aff_ru)) $aff_ru = "";
 	          $aff_ru .= "\n{
-	            \"name\": \"".$ru[$titre_sphere_2]."\",
-	            \"children\": [";
-
-	            // Recup liste des actions de cette rub
-
-	            $sqlact = "SELECT ".$titre_sphere_3.",".$id_sphere_3."
-	                      FROM  ".$nom_sphere_3." I,
-	                            ".$nom_relation_3." L
-	                      WHERE I.afficher > 0 
-	                        AND L.".$id1_relation_3." = ".$ru[$id_sphere_2]."
-	                        AND I.".$titre_sphere_3." != ''
-	                        AND I.".$id_sphere_3." = L.".$id2_relation_3;
-	            // echo $sqlact;
-	            $rsact = $ma_connexion->prepare($sqlact);
-	            $rsact->execute() or die ("Erreur : ".__LINE__." : ".$sqlact);
-	            $nb_actions = $rsact->rowCount();
-	            if ($nb_actions) {
-	              while ($ra = $rsact->fetch(PDO::FETCH_ASSOC))
-	              {
-	                // Nouvelle action
-	                if (isset($aff_ac)) $aff_ac .= ",";
-	                if(!isset($aff_ac)) $aff_ac = "";
-	                $size = strlen($ra[$titre_sphere_3])*strlen($ra[$titre_sphere_3]); // à remplacer par importance du projet (échelle de 1 à 5 par ex)
-	                $aff_ac .= "\n{
-	                  \"name\": \"".$ra[$titre_sphere_3]."\",
-	                  \"size\": ". $size.",
-	                  \"url\": \"fiche_action.php?id=".$ra[$id_sphere_3]."\"}";
-	              }
-	              $aff_ru .= $aff_ac;
-	              unset($aff_ac);
-	            }
-	          $aff_ru .= "\n]}";
+	            \"name\": \"".$ru[$titre_sphere_2]."\"";
+	          $aff_ru .= "\n}";
 	        }
 	        $aff_ci .= $aff_ru;
 	        unset($aff_ru);
