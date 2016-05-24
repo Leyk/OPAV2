@@ -1,11 +1,11 @@
 <?php
 include "inc/_var_fv.php";
 
-
 unset($erreur);
 unset($maReponse);
 unset($lesErreurs);
 unset($lesResultats);
+// variables de retour au formulaire
 $lesErreurs = array();
 $lesResultats = array();
 
@@ -18,7 +18,7 @@ if (isset($_POST['destinataire']) && isset($_POST['nom']) && isset($_POST['mail'
 	if (!valideMail($posteur_email)){ // vérification validité adresse mail saisie dans form
 		$erreur = true;
 	}
-	if($destinataire == "initiateur"){
+	if($destinataire == "initiateur"){ // vérification du champ message si l'on contacte un initiateur
 		if(isset($_POST['message'])){
 			$posteur_msg = $_POST['message'];
 		}
@@ -29,7 +29,7 @@ if (isset($_POST['destinataire']) && isset($_POST['nom']) && isset($_POST['mail'
 	else if ($destinataire == "diffusion"){
 		if ($pdo->getListeDiffusion($idproj)){
 			if(isset($_POST['message'])){
-				$posteur_msg = $_POST['message'];
+				$posteur_msg = $_POST['message']; // vérification du champ message si l'on contacte la liste de diffusion ET qu'il y a bien des adresses mails dans cette liste
 			}
 			else {
 				$erreur = true;

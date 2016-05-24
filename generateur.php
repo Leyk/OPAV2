@@ -1,4 +1,6 @@
 <?php
+// ======================= FORMULAIRE DE GENERATION DE LA CONSTELLATION =======================
+// REVOIR LA GENERATION HTML DU FORMULAIRE A L AIDE DE BOUCLES
 include_once ("vues/entete.php");
 include_once ("vues/menu.php");
 ?>
@@ -36,6 +38,8 @@ include_once ("vues/menu.php");
 	      	  </div> 
 	      	  <!-- FIN PARTIE CSV -->
 
+	      	  <!-- PARTIE BASE DE DONNEES -->
+	      	  <!-- FORMULAIRE DE CONNEXION A LA BASE -->
 	          <div id="formgene-etape1" class="row hide">
 	            <div class="large-12 columns">
 	          		<fieldset>
@@ -54,8 +58,10 @@ include_once ("vues/menu.php");
 	          		</div>
 	          	</div>
 	      	  </div> 
+	      	  <!-- FIN FORMULAIRE CONNEXION A LA BASE -->
 
-				<div id="formgene-etape2" class="row hide">
+
+			  <div id="formgene-etape2" class="row hide">
 	            <div class="large-12 columns">
 	          		<fieldset>
 	            		<legend>Etape 2/3 : Accès aux données</legend> 
@@ -67,60 +73,64 @@ include_once ("vues/menu.php");
 	            		<div class="row collapse">
 			              <div class="small-3 large-1 columns">
 			              	<center>
-			                <input type="button" id="btn_plus1" value="+" class="add">
+			                <input type="button" id="btn_plus1" value="+" class="add"> <!-- AJOUTER UNE TABLE -->
 			                </center>
 			              </div>
 			              <div class="small-9 large-11 columns">
-			                <input type="text" id="niv1" name="niv1" placeholder="Nom sphère de niveau 1" class="champ" value="actions_centreinteret">
+			                <input type="text" id="niv1" name="niv1" placeholder="Nom sphère de niveau 1" class="champ" value="actions_centreinteret"> <!-- NOM DE LA TABLE -->
 			              </div>
 			            </div>
 			            <div class="row">
 			            	<div class="large-7 large-offset-2 columns end">
-				            	<input type="text" id="idniv1" name="idniv1" placeholder="Champ id" class="champ" value="id">
+				            	<input type="text" id="idniv1" name="idniv1" placeholder="Champ id" class="champ" value="id"> <!-- CHAMP ID DE LA TABLE -->
 				            </div>
 				        </div>
 				        <div class="row">
 		            		<div class="large-7 large-offset-2 columns end">
-			            		<input type="text" id="titreniv1" name="titreniv1" placeholder="Champ titre" class="champ" value="titre">
+			            		<input type="text" id="titreniv1" name="titreniv1" placeholder="Champ titre" class="champ" value="titre"> <!-- CHAMP TITRE DE LA TABLE -->
 			            	</div>
 			            </div>
 			            <!-- FIN SPHERE DE NIVEAU 1 -->
+
+
 			            <!-- DEBUT SPHERE DE NIVEAU 2-->
 			            <div id="formniv2" class ="row hide">
 				            <div class="row collapse">
 				              <div class="small-3 large-1 columns">
 				              	<center>
-				                <input type="button" id="btn_plus2" value="+" class="add">
-				                <input type="button" id="btn_moins2" value="-" class="del">
+				                <input type="button" id="btn_plus2" value="+" class="add"> <!-- AJOUTER UNE TABLE -->
+				                <input type="button" id="btn_moins2" value="-" class="del"> <!-- SUPPRIMER LA DERNIERE TABLE -->
 				                </center>
 				              </div>
 				              <div class="small-9 large-11 columns">
-				                <input type="text" id="niv2" name="niv2" placeholder="Nom sphère de niveau 2" class="champ" value="actions_initiatives">
+				                <input type="text" id="niv2" name="niv2" placeholder="Nom sphère de niveau 2" class="champ" value="actions_initiatives"> <!-- NOM DE LA TABLE -->
 				              </div>
 				            </div>
 				            <div class="row">
 				            	<div class="large-7 large-offset-2 columns end">
-					            	<input type="text" id="idniv2" name="idniv2" placeholder="Champ id" class="champ" value="id">
+					            	<input type="text" id="idniv2" name="idniv2" placeholder="Champ id" class="champ" value="id"> <!-- CHAMP ID DE LA TABLE -->
 					            </div>
 					        </div>
 					        <div class="row">
 			            		<div class="large-7 large-offset-2 columns end">
-				            		<input type="text" id="titreniv2" name="titreniv2" placeholder="Champ titre" class="champ" value="initiative_titre">
+				            		<input type="text" id="titreniv2" name="titreniv2" placeholder="Champ titre" class="champ" value="initiative_titre"> <!-- CHAMP TITRE DE LA TABLE -->
 				            	</div>
 				            </div>
 				            <div class="row">
-			            		<div class="large-7 large-offset-2 columns end" id="p_scents2">
+			            		<div class="large-7 large-offset-2 columns end" id="p_scents2"> <!-- PERMET L'AJOUT DE CHAMPS SUPPLEMENTAIRES (dans le code JavaScript ; valable que si table feuille -->
 				            	</div>
 				            </div>
+				            <!-- GESTION DU CAS OU LA TABLE EST LA FEUILLE -->
 				            <div class="row" id="est_feuille2">
 			            		<div class="large-2 large-offset-2 columns">
 				            		<input type="checkbox" id="chbx_niv2" name="chbx_niv2" class= "type_niv" value="feuille"> Il s'agit d'une feuille
 				            	</div>
 				            	<div class="large-4 columns end hide" id="disp_btn2">
-				            		<input type="button" id="btn_add_champ2" class="add_champ" value="Ajouter un champ">
-				            		<input type="button" id="btn_del_champ2" class="del_champ" value="Supprimer un champ">
+				            		<input type="button" id="btn_add_champ2" class="add_champ" value="Ajouter un champ"> <!-- AJOUT D'UN CHAMP SUPPL -->
+				            		<input type="button" id="btn_del_champ2" class="del_champ" value="Supprimer un champ"> <!-- SUPPRESSION DERNIER CHAMP AJOUTE -->
 				            	</div>
 				            </div>
+				            <!-- GESTION DE LA LIAISON AVEC LA TABLE SUPERIEURE -->
 				            <div class="row">
 			            		<div class="large-7 large-offset-2 columns end">
 			            		<label>Type de relation entre sphère niveau 2 et sphère de niveau 1 (cardinalités maximales) :</label>
@@ -128,34 +138,37 @@ include_once ("vues/menu.php");
 				            </div>
 				            <div class="row">
 				            	<div class="large-7 large-offset-2 columns end">
-				            		<input type="radio" name="radioniv2" value="un" id="radioniv2_un" class="type_rel"><label for="Un">(1..n)</label>
-				            		<input type="radio" name="radioniv2" value="plusieurs" id="radioniv2_plusieurs" class="type_rel"><label for="Plusieurs">(n..n)</label>
+				            		<input type="radio" name="radioniv2" value="un" id="radioniv2_un" class="type_rel"><label for="Un">(1..n)</label> <!-- RELATION CARDINALITE MAX 1..N -->
+				            		<input type="radio" name="radioniv2" value="plusieurs" id="radioniv2_plusieurs" class="type_rel"><label for="Plusieurs">(n..n)</label> <!-- RELATION CARDINALITE MAX N..N -->
 				            	</div>
 				            </div>
+				            <!-- CAS 1..N -->
 				            <div id="formniv2_un" class="row hide">
 				            	<div class="large-7 large-offset-2 columns end">
-				            		<input type="text" id="idrelniv2" name="idrelniv2" placeholder="Champ id clé étrangère" class="champ" value="id_centreinteret">
+				            		<input type="text" id="idrelniv2" name="idrelniv2" placeholder="Champ id clé étrangère" class="champ" value="id_centreinteret"> <!-- NOM CHAMP CLE ETRANGERE -->
 				            	</div>
 				            </div>
+				            <!-- CAS N..N -->
 				            <div id="formniv2_plusieurs" class="row hide">
 				            	<div class="row">
 					            	<div class="large-7 large-offset-2 columns end">
-					            		<input type="text" id="tablerelniv2" name="tablerelniv2" placeholder="Table de relation" class="champ">
+					            		<input type="text" id="tablerelniv2" name="tablerelniv2" placeholder="Table de relation" class="champ"> <!-- NOM TABLE RELATION -->
 					            	</div>
 					            </div>
 					            <div class="row">
 					            	<div class="large-7 large-offset-2 columns end">
-					            		<input type="text" id="tableid1relniv2" name="tableid1relniv2" placeholder="Champ id niveau 1" class="champ">
+					            		<input type="text" id="tableid1relniv2" name="tableid1relniv2" placeholder="Champ id niveau 1" class="champ"> <!-- NOM CHAMP ID AVEC LA TABLE SUPERIEURE -->
 					            	</div>
 					            </div>
 					            <div class="row">
 					            	<div class="large-7 large-offset-2 columns end">
-					            		<input type="text" id="tableid2relniv2" name="tableid2relniv2" placeholder="Champ id niveau 2" class="champ">
+					            		<input type="text" id="tableid2relniv2" name="tableid2relniv2" placeholder="Champ id niveau 2" class="champ"> <!-- NOM CHAMP ID AVEC LA TABLE INFERIEURE -->
 					            	</div>
 					            </div>
 				            </div>
 			            </div>
 	 					<!-- FIN SPHERE DE NIVEAU 2 -->
+
 	 					<!-- DEBUT SPHERE DE NIVEAU 3-->
 			            <div id="formniv3" class ="row hide">
 				            <div class="row collapse">
@@ -227,6 +240,7 @@ include_once ("vues/menu.php");
 				            </div>
 			            </div>
 	 					<!-- FIN SPHERE DE NIVEAU 3 -->
+
 	 					<!-- DEBUT SPHERE DE NIVEAU 4-->
 			            <div id="formniv4" class ="row hide">
 				            <div class="row collapse">
@@ -297,6 +311,8 @@ include_once ("vues/menu.php");
 				            </div>
 			            </div>
 	 					<!-- FIN SPHERE DE NIVEAU 4 -->
+
+	 				<!-- VALIDATION DES DONNEES -->	
 	 				</fieldset>
 	          		<div class="row">
 	            		<div class="large-12 text-center">
@@ -305,6 +321,7 @@ include_once ("vues/menu.php");
 	          		</div>
 	          	</div>
 	          	</div>
+	          		<!-- ZONE D'AFFICHAGE DE LA CONSTELLATION GENEREE -->
 	          		<div id="div_constellation" class="row hide">
 	            		<div class="large-12 columns">
 			          		<fieldset>
@@ -314,13 +331,16 @@ include_once ("vues/menu.php");
 			          		</fieldset>
 	          			</div>
 	      	  		</div> <!-- end div constellation -->
+
+	      	  		<!-- ETAPE PERSONNALISATION ESTHETIQUE --> 
+	      	  		<!-- A COMPLETER -->
 	      	  		<div id="formgene-etape3" class="row hide">
 	            		<div class="large-12 columns">
 			          		<fieldset>
 			            		<legend>Etape 3/3 : Personnalisez votre Constellation !</legend> 
 			            		<span id="erreur_ergo"></span>
 						        <span id="resultat_ergo"></span>
-			            		Couleur des feuilles : <input class="jscolor" value="" id="feuille_couleur">
+			            		Couleur des feuilles : <input class="jscolor" value="" id="feuille_couleur"> <!-- AFFICHAGE PALETTE DE COULEUR -->
 			          		</fieldset>
 			          		<div class="row">
 			            		<div class="large-12 text-center">
@@ -329,6 +349,10 @@ include_once ("vues/menu.php");
 	          				</div>
 	          			</div>
 	      	 		</div> 
+	      	 		<!-- FIN PERSONNALISATION ESTHETIQUE -->
+
+	      	 		<!-- ZONE DE RECUPERATION DU CODE -->
+	      	 		<!-- A COMPLETER -->
 	      	 		<div id="formgene-etapefinale" class="row hide">
 	            		<div class="large-12 columns">
 			          		<fieldset>
@@ -345,8 +369,10 @@ include_once ("vues/menu.php");
 			          		</fieldset>
 	          			</div>
 	      	 		</div> 
+	      	 		<!-- FIN ZONE RECUPERATION DU CODE -->
+
 	          	</div> 
-	      	</div>         	
+	      	</div>  <!-- FIN PARTIE BASE DE DONNEES -->       	
   		</form>
      </div>     
     </section>
@@ -393,7 +419,7 @@ include_once ("vues/menu.php");
         // Ajuster la taille des textarea
         $('textarea').autosize(); 
 
-        // affichage du formulaire
+        // === affichage du formulaire adéquat selon la source de données choisie dans la liste déroulante ===
         $('#type_bd').change(function() {
           $('html, body').animate({
               scrollTop: $("#formgene").offset().top
@@ -412,12 +438,17 @@ include_once ("vues/menu.php");
           	$('#formgene-csv').slideDown();
           }
         });
+        // ==========================================================================
 
-        $('#feuille_couleur').change(function() {
+        // Changement de la couleur des cercles feuilles de la constellation par rapport au choix de la palette
+        // A COMPLETER
+        /*$('#feuille_couleur').change(function() {
         	var couleur = this.value;
 
-        })
+        })*/
 
+		// ======= GESTION DE L'AJOUT DE CHAMPS SUPPLEMENTAIRES POUR LES CERCLES FEUILLES ========
+		// la fonction récupère l'id du bouton cliqué pour ajouter des champs à la table correspondante
         $btn_add_champ.click(function(e){
         	var el = e.target||event.srcElement;
       		var id = el.id;
@@ -436,9 +467,10 @@ include_once ("vues/menu.php");
       			var i = $('#p_scents4 p').size() + 1;
       			$('<p><label for="p_scnts"><input type="text" id="p_scnt4_'+i+'" size="20" name="p_scnt_' + i +'" value="" placeholder="Champ supplémentaire" /></label></p>').appendTo(scntDiv);
       		}
-
         })
+		// ============================================================================================
 
+		// ======= GESTION DE SUPPRESSION DE CHAMPS SUPPLEMENTAIRES POUR LES CERCLES FEUILLES ========
         $btn_del_champ.click(function(e){
         	var el = e.target||event.srcElement;
       		var id = el.id;
@@ -456,7 +488,9 @@ include_once ("vues/menu.php");
 				$('#p_scnt4_'+i).parents('p').remove();      			
       		}
         })
+        // ============================================================================================
 
+        // GESTION DE L'AFFICHAGE DU FORMULAIRE RELATIF AUX RELATIONS ENTRE TABLES (DIFFERENCES DES CARDINALITES MAX)
         $btn_radio.change(function(e){
         	var el = e.target||event.srcElement;
       		var id = el.id;
@@ -485,7 +519,10 @@ include_once ("vues/menu.php");
       			$('#formniv4_plusieurs').slideDown();
       		}
         })
+        // ============================================================================================
 
+        // GESTION DE L'AFFICHAGE DU FORMULAIRE SELON SI LA CHECKBOX FEUILLE EST COCHEE POUR UNE TABLE + L'activation/désactivation des boutons
+        // La fonction récupère l'id de la checkbox dont le statut est modifié et applique l'ouverture du formulaire pour la bonne table
         $chk_box.change(function(e){
         	var el = e.target||event.srcElement;
       		var id = el.id;
@@ -538,15 +575,16 @@ include_once ("vues/menu.php");
       			}
       		} 	
         })
+		// ============================================================================================
                
         // Lors de la saisie
         $champ.keyup(function(){
 	        $(this).css({
-	          borderColor:'#cccccc'
+	          borderColor:'#cccccc' // on remet la couleur de bordure initiale si elle avait été changée
 	        })
       	});
 
-      	// Lorsque je clique sur "+" (ajout d'un niveau)
+      	// ===== Lorsque je clique sur "+" (ajout d'un niveau ) :  ouverture des formulaires relatifs à l'ajout d'une table =====
       	$bt_plus.click(function(e) {
       		var el = e.target||event.srcElement;
       		var id = el.id;
@@ -575,11 +613,11 @@ include_once ("vues/menu.php");
             	$('#btn_plus3').hide();
             	$('#btn_moins3').hide();
             	$('#est_feuille3').slideUp();
-      		}
-      		
+      		}	
       	})
+      	// ============================================================================================
 
-      	// Lorsque je clique sur "-" (suppression d'un niveau)
+      	// ==== Lorsque je clique sur "-" (suppression d'un niveau) : fermeture des formulaires relatifs à l'ajout d'une table ====
       	$bt_moins.click(function(e) {
       		var el = e.target||event.srcElement;
       		var id = el.id;
@@ -638,23 +676,23 @@ include_once ("vues/menu.php");
             	$('#est_feuille3').slideDown();
       		}	 
       	})
+		// ============================================================================================
 
-		// Lorsque je soumets le fichier CSV
+		// ======================= Lorsque je soumets le fichier CSV ==================================
+		// 	A COMPLETER
 		$btn_csv.click(function(e){	
 		  e.preventDefault();
           $erreur_csv.css('display','none');
           $resultat_csv.css('display','none'); 
          // var file = $('input[type="file"]').files[0];
-
-
-		})
-
-		/*$('input[type="file"]').change(function(){
+         /*$('input[type="file"]').change(function(){
         var file = this.files[0];
        	alert('Filename : ' + file.name + '<br />Filesize : ' + file.size);
 		});*/
+		})
+		// ============================================================================================
 
-        // Lorsque je soumets le test de connexion
+        // ==================  Lorsque je soumets le test de connexion ================================
         $test_co.click(function(e) {
           e.preventDefault();
           $erreur.css('display','none');
@@ -663,6 +701,7 @@ include_once ("vues/menu.php");
           champ.css({
             borderColor:'#cccccc'
           });
+          // Vérification que les champs adéquats sont bien remplis
           var src = $('#type_bd option:selected').val();
           var b_hote = verifier($bd_hote, "test_co");
           var b_bdnom = verifier($bd_nom, "test_co");
@@ -672,6 +711,7 @@ include_once ("vues/menu.php");
             $.post(
               'traitement_generateur.php',
               {
+              	// envoi des données
                 source : src,
                 hote : $bd_hote.val(),
                 bdname : $bd_nom.val(),
@@ -680,9 +720,10 @@ include_once ("vues/menu.php");
                 bouton : "btn_connexion"
               },
               function(data){
-                if(data == "Success"){
+                if(data == "Success"){ // connexion réussie
                   $resultat.html("<p>La connexion avec votre base de données a été établie avec succès !</p>");
                   $resultat.css('display','block');
+                  // le formulaire de connexion à la base ne peut plus être changé
                   $("#bd_hote").attr('disabled','disabled');
                   $("#bd_nom").attr('disabled','disabled');
                   $("#bd_user").attr('disabled','disabled');
@@ -694,7 +735,7 @@ include_once ("vues/menu.php");
 		           $('#formgene-etape2').slideUp();
 		           $('#formgene-etape2').slideDown();
                 }
-                else {
+                else { // erreur avec la connexion
                   $erreur.html("<p>Un problème est survenu lors de la connexion. Veuillez vérifier vos informations de connexion. <br> "+data+"</p>");
                   $erreur.css('display','block');
                 }
@@ -704,7 +745,8 @@ include_once ("vues/menu.php");
           }
       	});
 
-		// Lorsque je soumets les données
+		// ================= Lorsque je soumets les données afin de générer la constellation ====================
+		// A RE STRUCTURER 
 		$valider.click(function(e){
 			e.preventDefault();
 	      	$erreur_donnees.css('display','none');
@@ -713,11 +755,13 @@ include_once ("vues/menu.php");
           	    b_niv3 = false,
           	    b_niv4 = false,
           	    dataOk = false;
-          	    nb_niv = 1; // contrôle le nombre de niveaux au niveau du JSON
+          	    nb_niv = 1; // contrôle le nombre de niveaux (profondeur) au niveau du JSON
             var champ = $('.champ');
             champ.css({
             	borderColor:'#cccccc'
           	}); 
+          	// Vérification que les champs sont bien remplis (vérification partielle) + détermine la profondeur
+          	// A compléter avec la vérification de tous les champs
           	var src = $('#type_bd option:selected').val(); 
           	var b_sphere0 = verifier($('#niv0'), "valider_donnees");
           	var b_sphere1 = verifier($('#niv1'), "valider_donnees");
@@ -743,7 +787,7 @@ include_once ("vues/menu.php");
 		          		nb_niv = 4; 
 					}
 	          	}
-           	}
+           	} 
            	// ===== Vérification du remplissage des champs obligatoires, selon le nombre de sphère à générer ====
            	var liste_donnees = "";
             if(b_sphere0 && b_sphere1 && b_id1 && b_titre1){
@@ -776,7 +820,7 @@ include_once ("vues/menu.php");
            		$.post(
            			'traitement_generateur.php',
            			{
-           				// ========================= envoi des données récupérées dans tous les champs ===========
+           				// ========================= envoi des données récupérées dans tous les champs =========== A Compléter avec les champs supplémentaires ajoutés
            				bouton : "btn_validation",
            				source : src,
 		                hote : $bd_hote.val(),
@@ -812,12 +856,13 @@ include_once ("vues/menu.php");
 		            	// =============================================================================================
            			},
            			function(data){
+           				// retour succès avec affichage de la constellation
+           				// à compléter avec un retour erreur
            				$resultat_donnees.html("<p> Succès ! </p>");
            				$resultat_donnees.css('display','block');
            				$(valider_donnees).attr("disabled", true);
-           				$('#div_constellation').slideDown();          				
-           				var root = JSON.parse(data);
-           				console.log(data);
+           				$('#div_constellation').slideDown();   // affichage de la zone d'affichage pour la constellation       				
+           				var root = JSON.parse(data); // conversion des données text en JSON
 						
            				var margin = 1,
 			            	diameter = 900;   // diamètre minimum du cercle "root"
@@ -949,18 +994,18 @@ include_once ("vues/menu.php");
 					        d3.select(self.frameElement).style("height", diameter + "px");
 					        $('#formgene-etape3').slideDown();
            			},
-           			'text' // A CHECK?
+           			'text' 
            		);
            	}
 
 		});
 
-
+		// ============ Validation de la constellation -> affichage du code source ====
+		// A compléter
 		$valid_constel.click(function(e){
 			e.preventDefault();
 			$(valider_constellation).attr("disabled", true);
-			$('#formgene-etapefinale').slideDown();
-			
+			$('#formgene-etapefinale').slideDown();	
 		})
 
 		// Fonction qui vérifie si tous les champs obligatoires ont été remplis. Affiche un message d'erreur si ce n'est pas le cas

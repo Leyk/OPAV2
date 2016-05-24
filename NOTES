@@ -1,0 +1,9 @@
+=============================================== NOTES ==================================================
+* Les points à modifier et améliorer sont spécifiés dans le diagnostic technique
+* Le code est commenté au niveau de la constellation, du formulaire de contact, du générateur de constellation. Ils indiquent notamment les points à revoir, à compléter
+* Une classe PDO a été créée "class.pdoforcesvives.php" afin de centraliser toutes les fonctions d'accès aux données. Mais, dû à certains problèmes lors de la "migration", cela n'a pu être 
+entièrement achevé. (fonctions_affichage.php et le génératuer de constellation n'utilisent pas cette classe PDO mais le fichier _connexion.php)
+* La fonction d'envoi de mails via le formulaire de contact est à paramétrer avec les données du serveur sur lequel il sera déployé (fichier fonctions_globales.php)
+* le dossier "trash" contient du code qui n'est actuellement plus utilisé
+
+===============================================  ==================================================

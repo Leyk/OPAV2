@@ -1,4 +1,5 @@
 <?php 
+// FORMULAIRE DE CONTACT INITIATEUR / LISTE DE DIFFUSION
 require_once ("inc/_var_fv.php");
 include_once ("vues/entete.php"); ?>
   <body>
@@ -40,19 +41,20 @@ include_once ("vues/entete.php"); ?>
     </form>
 
     <?php 
+    // ============ Pour gérer l'affichage du formulaire ===============
     if(isset($mail_initiateur)){ // Vérification si une adresse mail est dispo pour contacter l'initiateur d'un projet
       $existMailInitiateur = true;
     } 
     else {
        $existMailInitiateur = false;
     }
-    if ($pdo->getListeDiffusion($id)){
+    if ($pdo->getListeDiffusion($id)){ // Vérification s'il y a au moins une adresse mail dans la liste de diffusion de l'initiative passée en paramètre
       $existeMailDiff = true;
     }
     else {
       $existeMailDiff = false;
     }
-
+    // ================================================================
     ?>
 
     <script src="js/vendor/jquery.js"></script>
@@ -79,13 +81,13 @@ include_once ("vues/entete.php"); ?>
           $dest = $('#dest_msg option:selected').val();
 
       // ================== affichage du formulaire =========================
-      $('#dest_msg').change(function(){
+      $('#dest_msg').change(function(){ // lors de la sélection d'un destinataire dans la liste déroulante
         $dest = $('#dest_msg option:selected').val();
         $erreur.css('display','none');
         $resultat.css('display','none');
         $info.css('display','none');
         $('#posteur_message').css("display","inline"); // réaffiche le champ message (cas où il a été masqué si aucun mail dans liste de diffusion de l'action)
-        // On veut contacter l'initiateur de l'action
+        // ============ On veut contacter l'initiateur de l'action ============
         if($(this).val() === "initiateur"){
           if(!$existe_mail_initiateur){
             $erreur.css('display','block');
@@ -102,7 +104,7 @@ include_once ("vues/entete.php"); ?>
             $('#formcontact-contenu').slideDown(); // ouvre le corps du formulaire 
           }
         }
-        // On veut contacter les personnes présentes dans la liste de diffusion de l'action
+        // =========== On veut contacter les personnes présentes dans la liste de diffusion de l'action ============
         else if($(this).val() === "diffusion") {
           // test si mails dans liste
           if(!$existe_mail_diff){ // s'il n'y a pas de mails dans la liste de diffusion
@@ -140,7 +142,7 @@ include_once ("vues/entete.php"); ?>
       // Lors de la saisie
       $champ.keyup(function(){
         $(this).css({
-          borderColor:'#CCCCCC'
+          borderColor:'#CCCCCC' // si on remplit un champ qui était obligatoire et non remplis, sa couleur redevient initiale
         })
       });
 
@@ -185,7 +187,8 @@ include_once ("vues/entete.php"); ?>
          	$.post(
 	          'traitement_formulaire.php',
 	          {
-	          	nom : $nom_personne.val(), // données envoyées au fichier ci-dessus
+              // données envoyées au fichier ci-dessus
+	          	nom : $nom_personne.val(), 
 	          	prenom : $prenom_personne.val(),
 	          	mail : $mail_personne.val(),
 	          	message : $msg_personne.val(),
