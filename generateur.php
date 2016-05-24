@@ -47,7 +47,7 @@ include_once ("vues/menu.php");
 	            		<span id="erreur"></span>
 				        <span id="resultat"></span>
 	            		<input type="text" id="bd_hote" name="bd_hote" placeholder="Hôte *" class="champ" value="127.0.0.1">
-			            <input type="text" id="bd_nom" name="bd_nom" placeholder="Nom de la base *" class="champ" value="bdtest2niv">
+			            <input type="text" id="bd_nom" name="bd_nom" placeholder="Nom de la base *" class="champ" value="bdtestopa">
 			            <input type="text" id="bd_user" name="bd_user" placeholder="Nom d'utilisateur *" class="champ" value="root">
 			            <input type="text" id="bd_pswd" name="bd_pswd" placeholder="Mot de passe " class="champ">
 	          		</fieldset>
@@ -77,7 +77,7 @@ include_once ("vues/menu.php");
 			                </center>
 			              </div>
 			              <div class="small-9 large-11 columns">
-			                <input type="text" id="niv1" name="niv1" placeholder="Nom sphère de niveau 1" class="champ" value="actions_centreinteret"> <!-- NOM DE LA TABLE -->
+			                <input type="text" id="niv1" name="niv1" placeholder="Nom sphère de niveau 1" class="champ" value="sphere_niveau1"> <!-- NOM DE LA TABLE -->
 			              </div>
 			            </div>
 			            <div class="row">
@@ -103,7 +103,7 @@ include_once ("vues/menu.php");
 				                </center>
 				              </div>
 				              <div class="small-9 large-11 columns">
-				                <input type="text" id="niv2" name="niv2" placeholder="Nom sphère de niveau 2" class="champ" value="actions_initiatives"> <!-- NOM DE LA TABLE -->
+				                <input type="text" id="niv2" name="niv2" placeholder="Nom sphère de niveau 2" class="champ" value="actions_rubriques"> <!-- NOM DE LA TABLE -->
 				              </div>
 				            </div>
 				            <div class="row">
@@ -113,7 +113,7 @@ include_once ("vues/menu.php");
 					        </div>
 					        <div class="row">
 			            		<div class="large-7 large-offset-2 columns end">
-				            		<input type="text" id="titreniv2" name="titreniv2" placeholder="Champ titre" class="champ" value="initiative_titre"> <!-- CHAMP TITRE DE LA TABLE -->
+				            		<input type="text" id="titreniv2" name="titreniv2" placeholder="Champ titre" class="champ" value="titre"> <!-- CHAMP TITRE DE LA TABLE --> 
 				            	</div>
 				            </div>
 				            <div class="row">
@@ -344,7 +344,7 @@ include_once ("vues/menu.php");
 			          		</fieldset>
 			          		<div class="row">
 			            		<div class="large-12 text-center">
-			              			<button type="submit" class="btn" id="valider_constellation">Valider et afficher le code</button>          
+			              			<button type="submit" class="btn" id="valider_constellation">Valider</button> 			              			     
 			            		</div>
 	          				</div>
 	          			</div>
@@ -355,18 +355,17 @@ include_once ("vues/menu.php");
 	      	 		<!-- A COMPLETER -->
 	      	 		<div id="formgene-etapefinale" class="row hide">
 	            		<div class="large-12 columns">
+	            		<center>
 			          		<fieldset>
 			            		<legend>Récupérez votre code !</legend> 
 			            		<span id="erreur_res"></span>
 						        <span id="resultat_res"></span>
-						       <!-- index.html : 
-			            		<textarea name="code_constel" id="code_constel" placeholder="Le code svg" class="champ"></textarea>
-			            		data.php : 
-			            		<textarea name="code_data" id="code_data" placeholder="Le code php données" class="champ"></textarea>
-						        d3js.css : 
-			            		<textarea name="code_css" id="code_css" placeholder="Le code CSS" class="champ"></textarea>-->
-			            		<!--<pre> <code class="html xml"> </code> </pre>-->
+						        <a class="button" href="#source-code" id="view-source">Code Source</a> 
+						        <div id="source-code">
+									<a href="#" id="x"><img src="http://css-tricks.com/examples/ViewSourceButton/images/x.png" alt="close"></a>
+								</div>  
 			          		</fieldset>
+			          		</center>
 	          			</div>
 	      	 		</div> 
 	      	 		<!-- FIN ZONE RECUPERATION DU CODE -->
@@ -386,6 +385,9 @@ include_once ("vues/menu.php");
     <script src="js/foundation.min.js"></script>
     <script src="js/foundation/foundation.reveal.js"></script>
     <script src="js/jquery.autosize.min.js"></script>
+    <!-- Pour génération du code source -->
+    <script src="//css-tricks.com/examples/ViewSourceButton/prettify/prettify.js"></script>
+    <link rel='stylesheet' href='//css-tricks.com/examples/ViewSourceButton/css/prettify.css'>
 
     <script>
       $(document).foundation();
@@ -773,21 +775,26 @@ include_once ("vues/menu.php");
 	          	var b_id2 = verifier($('#idniv2'), "valider_donnees");
 	          	var b_titre2 = verifier($('#titreniv2'), "valider_donnees"); 
 	          	nb_niv = 2;
+	          	feuille = $('#p_scents2 p');
 	          	if($('#formniv3').css('display') != 'none'){
 	          		b_niv3 = true;
 	          		var b_sphere3 = verifier($('#niv3'), "valider_donnees");
 	          		var b_id3 = verifier($('#idniv3'), "valider_donnees");
 	          		var b_titre3 = verifier($('#titreniv3'), "valider_donnees"); 
 	          		nb_niv = 3;
+	          		feuille = $('#p_scents3 p');
 	          		if($('#formniv4').css('display') != 'none'){
 	          			b_niv4 = true;
 						var b_sphere4 = verifier($('#niv4'), "valider_donnees");
 		          		var b_id4 = verifier($('#idniv4'), "valider_donnees");
 		          		var b_titre4 = verifier($('#titreniv4'), "valider_donnees");
 		          		nb_niv = 4; 
+		          		feuille = $('#p_scents4 p');
 					}
 	          	}
            	} 
+           	var nb_champs = count_champ(feuille);
+
            	// ===== Vérification du remplissage des champs obligatoires, selon le nombre de sphère à générer ====
            	var liste_donnees = "";
             if(b_sphere0 && b_sphere1 && b_id1 && b_titre1){
@@ -878,7 +885,7 @@ include_once ("vues/menu.php");
 				            .padding(7)   // espacement entre les cercles 
 				            .size([diameter - margin, diameter - margin]) // taille cercle root dans son conteneur
 				            .value(function (d) {
-				            return 100//d.size; // taille des feuilles 
+				            return d.size; // taille des feuilles 
 				        });
 
 
@@ -888,6 +895,13 @@ include_once ("vues/menu.php");
 				            .attr("id","carto")
 				            .append("g")  // pour grouper 
 				            .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+
+						// === Définition des tooltips ===
+				        var myTooltip = d3.select("#svgdiv")
+						    .append("div")
+						    .attr("class", "myTooltip")
+							  .style("opacity", 0);  // elles sont invisibles de base
+				        // =================================
 
 				        var focus = root,   // focus initial sur le root (variable contenant tout l'arbre de données) récupérée dans le JSON
 				            nodes = pack.nodes(root),
@@ -909,6 +923,26 @@ include_once ("vues/menu.php");
 				            }) 
 
 				            .on("click", clickFct) 
+				            .on("mouseover",mouseover)
+            				.on("mouseout",mouseout)
+
+					        // Fonction définissant l'apparition des tooltips lors du passage de la souris sur une feuille
+					        function mouseover(d) {
+					        	if(d3.select(this).classed("node--leaf")){
+						           myTooltip.html(d.name)
+						        /*.style("left", (d3.event.pageX + 10) + "px")
+							        .style("top", (d3.event.pageY - 10) + "px")*/    // NB : petit problème d'affichage des tooltips lors du zoom ...
+							        .style("left", (d.x)+"px")
+							        .style("top", (d.y) +"px")
+							        .style("opacity", 1);
+					          }
+					        };
+
+			       			// Fonction définissant la disparition des tooltips lorsque la souris sort d'une feuille
+							function mouseout(d) {      
+							  myTooltip.style("opacity", 0);
+							}
+
 
 				             // Fonction définissant le click sur un cercle. S'il s'agit d'une feuille, le volet d'information affiche la fiche du projet
 					        function clickFct(d,i) {  // i = place dans l'arbre Json (0 = forcesvives = root)
@@ -942,6 +976,55 @@ include_once ("vues/menu.php");
 					              var thisNode = d3.select(this);
 					              return d.name;
 					            });
+
+					          function wrap(name, rayon, el){
+							    var words = name.split(/\s+/).reverse(); // découpage en mots + reverse : premier mot devient le dernier et le dernier devient le premier
+							    el.text('');
+							    var	word,
+							    	saveSpan = [],
+							    	line = [],
+							    	lineNumber = 0,
+							    	lineHeight = 30,
+							    	y = el.attr("y"),
+							    	valY = 0,
+							    	dy = parseFloat(el.attr("dy"))
+							    var tspan = el.append("tspan").attr("x",0).attr("y",valY).attr("dy", 0);
+							    saveSpan.push(tspan);  // pour garder en mémoire les différents tspan pour un même titre (sert à pouvoir les modifier si nb ligne > 3) (à voir pour meilleure façon de faire)
+						    	while (word = words.pop()){  // tant qu'il y a des mots (parcours de tous les mots)
+						    		line.push(word);  // ajoute le mot à la ligne
+						    		tspan.text(line.join(" "));  // ajoute la ligne en texte
+						    		//alert(d.name+" "+tspan.node().getBBox().height); // à creuser pour prendre en compte également la hauteur...
+				           			//alert(rayon*2*k);
+						    		if (tspan.node().getComputedTextLength() >= rayon*2){  // si la taille du texte après ajout d'un mot dépasse le diamètre (r*2) du cercle, on retire le mot et on va à la ligne
+						    			line.pop(); 
+						    			tspan.text(line.join(" ")); 
+						    			line = [word];
+						    			tspan = el.append("tspan").attr("x",0).attr("y",valY).attr("dy",++lineNumber*lineHeight).text(word);
+						    			saveSpan.push(tspan);
+						    		}
+						    	}
+				          // La partie ci-dessous se charge de recentrer le texte si celui-ci est affiché sur plus de 3 lignes (à améliorer/optimiser?)
+						    	lineNumber = lineNumber+1;
+						    	if (lineNumber >= 3){ // s'il y a au moins 3 lignes, on réajuste y pour centrer verticalement les titres
+						    		if((lineNumber % 2) == 0){  // nombre de ligne pair
+						    			while (maSpan = saveSpan.pop()){
+						    				var mult = (lineNumber/2)-1
+						    	    		maSpan.attr('y',-lineHeight*mult);
+						    	    	}
+						    		}
+						    		else {
+						    			while (maSpan = saveSpan.pop()){ // nombre de ligne impair
+						    				var mult = ~~(lineNumber/2);
+						    	    		maSpan.attr('y',-lineHeight*mult);
+						    	    	}
+						    		}
+						    	}
+						    };
+
+				        // application de la fonction wrap dés le chargement de la page
+						    svg.selectAll('text').each(function(d){
+						     	return wrap(d.name, d.r, d3.select(this))
+						    });
 
 					        var node = svg.selectAll("circle,text");
 
@@ -979,7 +1062,14 @@ include_once ("vues/menu.php");
 					              .each("end", function (d) {
 					                if (d.parent !== focus) this.style.display = "none"; 
 					              })
-					        }
+					              // Le wrap du text est réappliqué lors du zoom afin de prendre en compte le nouveau rayon des cercles
+						          // La 'pause' de 100 milisec sert à s'assurer que les text ont bien été affichés (transition) pour être sur que getComputedLength (fonction wrap) ne renvoie pas 0   
+						      		setTimeout(function(){
+						      			var txt = transition.selectAll('text').each(function(d){
+						         			return wrap(d.name, d.r, d3.select(this))
+						        		});
+						      		},100)
+						        }
 
 					        function zoomTo(v) {
 					          var k = diameter / v[2];
@@ -1008,6 +1098,12 @@ include_once ("vues/menu.php");
 			$('#formgene-etapefinale').slideDown();	
 		})
 
+		// Fonction qui compte le nombre de champs supplémentaires ajoutés
+		function count_champ(feuille){
+			var nb = feuille.size();
+			return nb;
+		}
+
 		// Fonction qui vérifie si tous les champs obligatoires ont été remplis. Affiche un message d'erreur si ce n'est pas le cas
 		function verifier(champ, form){  
         	var bool = true;
@@ -1031,6 +1127,21 @@ include_once ("vues/menu.php");
 	        return bool;
       	}
    	  });     
+    </script>
+    <script>
+    // Cette fonction se charge d'afficher le code source de la page dans une fenetre
+    $(function() {
+			$("<pre />", {
+				"html":   '&lt;!DOCTYPE html>\n&lt;html>\n' +
+						$("html")
+							.html()
+							.replace(/[<>]/g, function(m) { return {'<':'&lt;','>':'&gt;'}[m]})
+							.replace(/((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/gi,'<a href="$1">$1</a>') +
+						'\n&lt;/html>',
+				"class": "prettyprint"
+			}).appendTo("#source-code"); // ajout dans la div du formulaire
+			prettyPrint(); // mise en forme
+		});
     </script>
   </body>
   <?php include_once("vues/foot.php"); ?>
