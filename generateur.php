@@ -15,18 +15,18 @@ include_once ("vues/menu.php");
 	              <select name="type_bd" id="type_bd">
 	                <option value="">Choisissez votre base de données</option>
 	                <option value="mysql">MySQL</option>
-	                <option value="csv">Fichier .txt</option>
+	                <option value="txt">Fichier .txt</option>
 	              </select>
 	            </div>
 	          </div>
 
 	          <!-- PARTIE POUR .txt -->
-	          <div id="formgene-csv" class="row hide">
+	          <div id="formgene-txt" class="row hide">
 	          <div class="large-12 columns">
 	          		<fieldset>
 	            		<legend>Votre fichier .txt</legend> 
-	            		<span id="erreur_csv"></span>
-				        <span id="resultat_csv"></span>
+	            		<span id="erreur_txt"></span>
+				        <span id="resultat_txt"></span>
 		                <input type="file" id="parcourir" name="fichier">
 	          		</fieldset>
 	          	</div>
@@ -41,10 +41,10 @@ include_once ("vues/menu.php");
 	            		<legend>Etape 1/3 : Accès à la base</legend> 
 	            		<span id="erreur"></span>
 				        <span id="resultat"></span>
-	            		<input type="text" id="bd_hote" name="bd_hote" placeholder="Hôte *" class="champ" value="127.0.0.1">
-			            <input type="text" id="bd_nom" name="bd_nom" placeholder="Nom de la base *" class="champ" value="bdtestopa">
-			            <input type="text" id="bd_user" name="bd_user" placeholder="Nom d'utilisateur *" class="champ" value="root">
-			            <input type="text" id="bd_pswd" name="bd_pswd" placeholder="Mot de passe " class="champ">
+	            		<input type="text" id="bd_hote" name="bd_hote" placeholder="Hôte *" class="champ" value="">
+			            <input type="text" id="bd_nom" name="bd_nom" placeholder="Nom de la base *" class="champ" value="">
+			            <input type="text" id="bd_user" name="bd_user" placeholder="Nom d'utilisateur *" class="champ" value="">
+			            <input type="password" id="bd_pswd" name="bd_pswd" placeholder="Mot de passe " class="champ">
 	          		</fieldset>
 	          		<div class="row">
 	            		<div class="large-12 text-center">
@@ -72,7 +72,7 @@ include_once ("vues/menu.php");
 			                </center>
 			              </div>
 			              <div class="small-9 large-11 columns">
-			                <input type="text" id="niv1" name="niv1" placeholder="Nom sphère de niveau 1" class="champ" value="sphere_niveau1"> <!-- NOM DE LA TABLE -->
+			                <input type="text" id="niv1" name="niv1" placeholder="Nom sphère de niveau 1" class="champ" value="actions_centreinteret"> <!-- NOM DE LA TABLE -->
 			              </div>
 			            </div>
 			            <div class="row">
@@ -174,7 +174,7 @@ include_once ("vues/menu.php");
 				                </center>
 				              </div>
 				              <div class="small-9 large-11 columns">
-				                <input type="text" id="niv3" name="niv3" placeholder="Nom sphère de niveau 3" class="champ" value="feuille">
+				                <input type="text" id="niv3" name="niv3" placeholder="Nom sphère de niveau 3" class="champ" value="actions_initiatives">
 				              </div>
 				            </div>
 				            <div class="row">
@@ -219,7 +219,7 @@ include_once ("vues/menu.php");
 				            <div id="formniv3_plusieurs" class="row hide">
 				            	<div class="row">
 					            	<div class="large-7 large-offset-2 columns end">
-					            		<input type="text" id="tablerelniv3" name="tablerelniv3" placeholder="Table de relation" class="champ" value="feuille_rubriques">
+					            		<input type="text" id="tablerelniv3" name="tablerelniv3" placeholder="Table de relation" class="champ" value="actions_rubriques">
 					            	</div>
 					            </div>
 					            <div class="row">
@@ -321,8 +321,10 @@ include_once ("vues/menu.php");
 	            		<div class="large-12 columns">
 			          		<fieldset>
 			            		<legend>Votre Constellation</legend> 
-			            		<div id="svgdiv" class = "large-12 columns">
-	    						</div>
+			            		<center>
+				            		<div id="svgdiv" class = "large-12 columns">
+		    						</div>
+	    						</center>
 			          		</fieldset>
 	          			</div>
 	      	  		</div> <!-- end div constellation -->
@@ -392,8 +394,8 @@ include_once ("vues/menu.php");
           	$resultat = $('#resultat'),
           	$erreur_donnees = $('#erreur_donnees'),
           	$resultat_donnees = $('#resultat_donnees'),
-          	$erreur_csv = $('#erreur_csv'),
-          	$resultat_csv = $('#resultat_csv'),
+          	$erreur_txt = $('#erreur_txt'),
+          	$resultat_txt = $('#resultat_txt'),
       		$test_co = $('#test_connexion'),
       		$valider = $('#valider_donnees'),
       		$bt_plus = $('.add'),
@@ -405,7 +407,7 @@ include_once ("vues/menu.php");
       		$champ = $('.champ'),
       		$btn_radio = $('.type_rel'),
       		$chk_box = $('.type_niv'),
-      		$btn_csv = $('#valide_csv'),
+      		$btn_txt = $('#valide_txt'),
       		$btn_add_champ = $('.add_champ'),
       		$btn_del_champ = $('.del_champ'),
       		$bd_pswd = $('#bd_pswd');
@@ -424,15 +426,15 @@ include_once ("vues/menu.php");
 
           if ($(this).val()===""){
             $('#formgene-etape1').slideUp();
-            $('#formgene-csv').slideUp();
+            $('#formgene-txt').slideUp();
           }
           else if ($(this).val()==="mysql"){
-          	$('#formgene-csv').slideUp();
+          	$('#formgene-txt').slideUp();
             $('#formgene-etape1').slideDown();
           }
-          else if($(this).val()==="csv"){
+          else if($(this).val()==="txt"){
           	$('#formgene-etape1').slideUp();
-          	$('#formgene-csv').slideDown();
+          	$('#formgene-txt').slideDown();
           }
         });
         // ==========================================================================
@@ -828,7 +830,6 @@ include_once ("vues/menu.php");
 	          	}
            	} 
            	var nb_champs = count_champ(feuille);
-           	alert(nb_champs+" "+feuille);
 
            	// ===== Vérification du remplissage des champs obligatoires, selon le nombre de sphère à générer ====
            	var liste_donnees = "";
@@ -970,6 +971,7 @@ include_once ("vues/menu.php");
 	            .on("click", clickFct) 
 	            .on("mouseover",mouseover)
 				.on("mouseout",mouseout)
+
 
 	        // Fonction définissant l'apparition des tooltips lors du passage de la souris sur une feuille
 	        function mouseover(d) {
