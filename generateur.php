@@ -193,7 +193,7 @@ include_once ("vues/menu.php");
 				            </div>
 				            <div class="row" id="est_feuille3">
 			            		<div class="large-2 large-offset-2 columns">
-				            		<input type="checkbox" id="chbx_niv3" name="chbx_niv3" class= "type_niv" value="feuille"> Il s'agit d'une feuille
+				            		<input type="checkbox" id="chbx_niv3" name="chbx_niv3" class= "type_niv" value="actions_initiatives"> Il s'agit d'une feuille
 				            	</div>
 				            	<div class="large-4 columns end hide" id="disp_btn3">
 				            		<input type="button" id="btn_add_champ3" class="add_champ" value="Ajouter un champ">
@@ -219,7 +219,7 @@ include_once ("vues/menu.php");
 				            <div id="formniv3_plusieurs" class="row hide">
 				            	<div class="row">
 					            	<div class="large-7 large-offset-2 columns end">
-					            		<input type="text" id="tablerelniv3" name="tablerelniv3" placeholder="Table de relation" class="champ" value="actions_rubriques">
+					            		<input type="text" id="tablerelniv3" name="tablerelniv3" placeholder="Table de relation" class="champ" value="actions_initiatives_rubriques">
 					            	</div>
 					            </div>
 					            <div class="row">
@@ -321,8 +321,15 @@ include_once ("vues/menu.php");
 	            		<div class="large-12 columns">
 			          		<fieldset>
 			            		<legend>Votre Constellation</legend> 
+			            		<nav class="large-4 columns" id="volet">
+						    	<h2>Navigation dans la Constellation</h2>
+						    	<br/>
+						    	<p>Cliquez sur les cercles pour naviguer de centre d'intérêt en centre d'intérêt, de rubrique en rubrique, et afficher la fiche de l'action que vous souhaitez consulter.</p> 
+						    	<p>Lorsque les coordonnées de l'initiateur d'une action sont disponibles, un formulaire vous permet de le contacter via la fiche détail de l'action.</p>
+						    	<p>De même, si vous souhaitez contacter ou être contacté par les forces vives d'une action, remplissez le formulaire via sa fiche.</p>
+						    	</nav>
 			            		<center>
-				            		<div id="svgdiv" class = "large-12 columns">
+				            		<div id="svgdiv" class = "large-8 columns">
 		    						</div>
 	    						</center>
 			          		</fieldset>
@@ -420,6 +427,9 @@ include_once ("vues/menu.php");
 
         // === affichage du formulaire adéquat selon la source de données choisie dans la liste déroulante ===
         $('#type_bd').change(function() {
+        	$('#formgene-etape3').slideUp();
+        	$('#formgene-etapefinale').slideUp();
+        	$('#div_constellation').slideUp();
           $('html, body').animate({
               scrollTop: $("#formgene").offset().top
           }, 1000);
@@ -918,7 +928,7 @@ include_once ("vues/menu.php");
 			$('#div_constellation').slideDown();   // affichage de la zone d'affichage pour la constellation       				
 		
 			var margin = 1,
-        	diameter = 900;   // diamètre minimum du cercle "root"
+        	diameter = 1500;   // diamètre minimum du cercle "root"
             if(window.innerWidth >= 1700){  // si grand écran, root plus grand
             	diameter = window.innerWidth/1.7;
             }
@@ -929,9 +939,15 @@ include_once ("vues/menu.php");
 
 	        var pack = d3.layout.pack()
 	            .padding(7)   // espacement entre les cercles 
-	            .size([diameter - margin, diameter - margin]) // taille cercle root dans son conteneur
-	            .value(function (d) {
-	            return Math.floor(Math.random()*501);//d.size; // taille des feuilles 
+	            .size([2*diameter + margin, 2*diameter + margin]) // taille cercle root dans son conteneur
+	            .value(function (d) { // taille des feuilles 
+	            	if ( typeof d.size !== 'undefined'){
+	            		return d.size; // cas où l'utilisateur a saisie une taille pour les cercles
+	            	}
+	            	else {
+	            		return Math.floor(Math.random()*501); // taille aléatoire sinon
+	            	}
+	            
 	        });
 
 
@@ -977,10 +993,10 @@ include_once ("vues/menu.php");
 	        function mouseover(d) {
 	        	if(d3.select(this).classed("node--leaf")){
 		           myTooltip.html(d.name)
-		        /*.style("left", (d3.event.pageX + 10) + "px")
-			        .style("top", (d3.event.pageY - 10) + "px")*/    // NB : petit problème d'affichage des tooltips lors du zoom ...
-			        .style("left", (d.x)+"px")
-			        .style("top", (d.y) +"px")
+		        .style("left", (d3.event.pageX + 10) + "px")
+			        .style("top", (500) + "px")    // NB : petit problème d'affichage des tooltips sur l'axe Y...
+			        /*.style("left", (d.x)+"px")
+			        .style("top", (d.y) +"px")*/
 			        .style("opacity", 1);
 	         	}
 	        };
@@ -994,6 +1010,9 @@ include_once ("vues/menu.php");
              // Fonction définissant le click sur un cercle. S'il s'agit d'une feuille, le volet d'information affiche la fiche du projet
 	        function clickFct(d,i) {  // i = place dans l'arbre Json (0 = forcesvives = root)
 	          if(d3.select(this).classed("node--leaf")){
+	          	if ( typeof d.url !== 'undefined'){
+					$('#volet').load(d.url);  // chargement de la fiche projet dans le volet
+	          	}	
 	            if (focus !== d){  // si on n'est pas centré sur le focus, on zoom dessus 
 	              zoom(d.parent);
 	              d3.event.stopPropagation();  // fonction qui permet le zoom 
@@ -1024,6 +1043,36 @@ include_once ("vues/menu.php");
 	              return d.name;
 	            });
 
+	        // ================================ Dimensions du volet ===============================================
+        	// Fonction qui adapte la taille du volet selon la taille de la fenetre - Responsive
+        	function redimensionnement(){
+	    		var result  = $('#volet');
+	    		if("matchMedia" in window) { // Détection
+		    		if(window.matchMedia("(min-width: 1026px)").matches){
+		    			result.css('height',diameter);
+		    		}
+		    		else if(window.matchMedia("(min-width: 992px)").matches){
+		    			result.css('height',400);
+		    		}
+		    		else if(window.matchMedia("(min-width: 768px)").matches){
+		    			result.css('height',300);
+		    		}
+		    		else{
+		    			result.css('height',200);
+		    		}
+	    		}
+    		}
+  			// On lie l'évenement resize à la fonction
+  			window.addEventListener('resize',redimensionnement, false);
+
+  			// Exécution de la fonction au démarrage pour avoir un retour initial
+  			redimensionnement();
+			// ====================================================================================================
+
+			// ================================ Mise en forme du texte ============================================
+	        // Fonction qui se charge de gérer l'affichage du texte dans les cercles de façon à ce que celui-ci ne dépasse pas en largeur
+	        // NB : à améliorer pour prendre en compte la hauteur
+	        // + problème à résoudre : récupérer le 'nouveau' rayon (changement de celui-ci lors du zoom)
 	        function wrap(name, rayon, el){
 			    var words = name.split(/\s+/).reverse(); // découpage en mots + reverse : premier mot devient le dernier et le dernier devient le premier
 			    el.text('');
@@ -1070,7 +1119,7 @@ include_once ("vues/menu.php");
 
 	        // application de la fonction wrap dés le chargement de la page
 		    svg.selectAll('text').each(function(d){
-		     	return wrap(d.name, d.r, d3.select(this))
+		     	return wrap(d.name, d.r/2, d3.select(this))
 		    });
 
 	        var node = svg.selectAll("circle,text");
